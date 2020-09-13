@@ -5,8 +5,8 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, StateLogger {
-    enum AppState: String, ItemProtocol {
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    private enum AppState: String, ItemProtocol {
         case notRunnig = "not running"
         case inactive = "foreground inactive"
         case active = "foreground active"
@@ -14,15 +14,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLogger {
         case suspended = "suspended"
     }
 
-    let objectType: String = "Application"
-    var previousState: AppState = .notRunnig
+    private let stateLogger = AppStateLogger<AppState>(instanceType: "ApplicationDelegate", initialState: .notRunnig)
     var window: UIWindow?
 
     func application(
         _: UIApplication,
         willFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
-        logNextState(.notRunnig, functionName: #function)
+        stateLogger.capture(reason: #function, state: .notRunnig)
         return true
     }
 
@@ -37,27 +36,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLogger {
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
 
-        logNextState(.inactive, functionName: #function)
+        stateLogger.capture(reason: #function, state: .inactive)
         return true
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        logNextState(.active, functionName: #function)
+        stateLogger.capture(reason: #function, state: .active)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        logNextState(.inactive, functionName: #function)
+        stateLogger.capture(reason: #function, state: .inactive)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        logNextState(.background, functionName: #function)
+        stateLogger.capture(reason: #function, state: .background)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        logNextState(.inactive, functionName: #function)
+        stateLogger.capture(reason: #function, state: .inactive)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        logNextState(.suspended, functionName: #function)
+        stateLogger.capture(reason: #function, state: .suspended)
     }
 }

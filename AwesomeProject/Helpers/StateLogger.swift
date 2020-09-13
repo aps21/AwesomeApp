@@ -9,27 +9,52 @@ protocol ItemProtocol: Equatable {
     var rawValue: String { get }
 }
 
-protocol StateLogger: AnyObject {
-    associatedtype Item: ItemProtocol
-
-    var objectType: String { get }
-    var previousState: Item { get set }
-    func logNextState(_ nextState: Item, functionName: String)
+extension OSLog {
+    private static let subsystem = Bundle.main.bundleIdentifier
+    static let stateLogger = OSLog(subsystem: subsystem ?? "", category: "State logger")
 }
 
-extension StateLogger {
-    func logNextState(_ nextState: Item, functionName: String) {
-        logState(nextState: nextState, functionName: functionName)
-        previousState = nextState
+class AppStateLogger<State: ItemProtocol> {
+    let instanceType: String
+
+    private var previousState: State
+    private var currentState: State
+    private var reason: String = "unknown"
+
+    init(instanceType: String, initialState: State) {
+        self.instanceType = instanceType
+        self.previousState = initialState
+        self.currentState = initialState
     }
 
-    private func logState(nextState: Item, functionName: String) {
+    func capture(reason: String, state: State) {
+        self.reason = reason
+        previousState = self.currentState
+        currentState = state
         #if LOGGER
-            if nextState == previousState {
-                os_log("%@ was %@: %@", type: .debug, objectType, previousState.rawValue, functionName)
-            } else {
-                os_log("%@ moved from %@ to %@: %@", type: .debug, objectType, previousState.rawValue, nextState.rawValue, functionName)
-            }
+          log()
         #endif
+    }
+
+    private func log() {
+        if currentState == previousState {
+            os_log(
+                "%@ was \"%@\": \"%@\"",
+                log: .stateLogger,
+                type: .debug,
+                instanceType,
+                previousState.rawValue,
+                reason
+            )
+        } else {
+            os_log(
+                "%@ moved from \"%@\" to \"%@\" due the reason \"%@\"",
+                log: .stateLogger,
+                type: .debug,
+                instanceType,
+                previousState.rawValue,
+                currentState.rawValue, reason
+            )
+        }
     }
 }

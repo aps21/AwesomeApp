@@ -4,8 +4,8 @@
 
 import UIKit
 
-class ViewController: UIViewController, StateLogger {
-    enum VCState: String, ItemProtocol {
+class ViewController: UIViewController {
+    private enum VCState: String, ItemProtocol {
         case notInitialized
         case initialized
         case loadView
@@ -18,57 +18,55 @@ class ViewController: UIViewController, StateLogger {
         case didDisappear
     }
 
-    let objectType: String = "ViewController"
-    var previousState: VCState = .notInitialized
+    private let stateLogger = AppStateLogger<VCState>(instanceType: "ViewController", initialState: .notInitialized)
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        logNextState(.initialized, functionName: #function)
+        stateLogger.capture(reason: #function, state: .initialized)
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        logNextState(.initialized, functionName: #function)
+        stateLogger.capture(reason: #function, state: .initialized)
     }
 
     override func loadView() {
         super.loadView()
-        logNextState(.loadView, functionName: #function)
+        stateLogger.capture(reason: #function, state: .loadView)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        logNextState(.didLoad, functionName: #function)
+        stateLogger.capture(reason: #function, state: .didLoad)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        logNextState(.willAppear, functionName: #function)
+        stateLogger.capture(reason: #function, state: .willAppear)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        logNextState(.didAppear, functionName: #function)
+        stateLogger.capture(reason: #function, state: .didAppear)
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        logNextState(.willLayout, functionName: #function)
+        stateLogger.capture(reason: #function, state: .willLayout)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        logNextState(.didLayout, functionName: #function)
+        stateLogger.capture(reason: #function, state: .didLayout)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        logNextState(.willDisappear, functionName: #function)
+        stateLogger.capture(reason: #function, state: .willDisappear)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        logNextState(.didDisappear, functionName: #function)
+        stateLogger.capture(reason: #function, state: .didDisappear)
     }
 }
-
