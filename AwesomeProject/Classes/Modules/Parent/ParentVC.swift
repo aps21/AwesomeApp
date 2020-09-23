@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ParentVC: UIViewController {
     private enum VCState: String, ItemProtocol {
         case notInitialized
         case initialized
@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     }
 
     private let stateLogger = AppStateLogger<VCState>(instanceType: "ViewController", initialState: .notInitialized)
+    private let debugLogger = Logger()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -68,5 +69,9 @@ class ViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         stateLogger.capture(reason: #function, state: .didDisappear)
+    }
+
+    func log(message: String) {
+        debugLogger.log(message)
     }
 }

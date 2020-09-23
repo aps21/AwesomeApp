@@ -9,11 +9,6 @@ protocol ItemProtocol: Equatable {
     var rawValue: String { get }
 }
 
-extension OSLog {
-    private static let subsystem = Bundle.main.bundleIdentifier
-    static let stateLogger = OSLog(subsystem: subsystem ?? "", category: "State logger")
-}
-
 class AppStateLogger<State: ItemProtocol> {
     let instanceType: String
 
