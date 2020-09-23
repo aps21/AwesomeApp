@@ -12,6 +12,9 @@ enum L10n {
             static let fromCamera = NSLocalizedString("profile.avatar-alert.from-camera", comment: "")
             static let delete = NSLocalizedString("profile.avatar-alert.delete", comment: "")
             static let cancel = NSLocalizedString("profile.avatar-alert.cancel", comment: "")
+            static let errorTitle = NSLocalizedString("profile.avatar-alert.error-title", comment: "")
+            static let errorDescription = NSLocalizedString("profile.avatar-alert.error-description", comment: "")
+            static let errorSettings = NSLocalizedString("profile.avatar-alert.error-settings", comment: "")
         }
     }
 }

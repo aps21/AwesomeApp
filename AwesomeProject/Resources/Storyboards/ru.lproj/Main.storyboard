@@ -101,7 +101,7 @@
                                 <edgeInsets key="layoutMargins" top="10" left="0.0" bottom="10" right="0.0"/>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EQ9-Xt-YFR">
-                                <rect key="frame" x="268" y="222" width="42" height="40"/>
+                                <rect key="frame" x="267.5" y="222" width="42" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="bac-6h-0J0"/>
                                 </constraints>
@@ -119,9 +119,9 @@
                             <constraint firstItem="EPe-UT-9ZB" firstAttribute="leading" secondItem="mIq-PV-oaL" secondAttribute="leading" id="8he-Fk-6zJ"/>
                             <constraint firstItem="mIq-PV-oaL" firstAttribute="bottom" secondItem="EPe-UT-9ZB" secondAttribute="bottom" id="Qtx-Tt-PEa"/>
                             <constraint firstItem="EPe-UT-9ZB" firstAttribute="top" secondItem="mIq-PV-oaL" secondAttribute="top" id="RBJ-i5-MK5"/>
-                            <constraint firstItem="mIq-PV-oaL" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="EQ9-Xt-YFR" secondAttribute="trailing" constant="10" id="dSe-1p-g5I"/>
                             <constraint firstItem="EPe-UT-9ZB" firstAttribute="trailing" secondItem="mIq-PV-oaL" secondAttribute="trailing" id="o9A-MM-db2"/>
-                            <constraint firstItem="EQ9-Xt-YFR" firstAttribute="leading" secondItem="pze-mz-cgH" secondAttribute="centerX" multiplier="1.67" id="p0I-Xe-53G"/>
+                            <constraint firstItem="EQ9-Xt-YFR" firstAttribute="trailing" secondItem="pze-mz-cgH" secondAttribute="trailing" constant="2" id="oN0-fy-r2a"/>
+                            <constraint firstItem="EQ9-Xt-YFR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="pze-mz-cgH" secondAttribute="centerX" multiplier="1.5" id="rOi-fY-xM7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="mIq-PV-oaL"/>
                     </view>

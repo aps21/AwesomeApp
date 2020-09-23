@@ -2,6 +2,7 @@
 // AwesomeProject
 //
 
+import Photos
 import UIKit
 
 class MainVC: ParentVC {
@@ -58,7 +59,22 @@ class MainVC: ParentVC {
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             alert.addAction(UIAlertAction(title: L10n.Profile.AvatarAlert.fromCamera, style: .default) { [weak self] _ in
-                self?.presentImagePicker(type: .camera)
+                switch AVCaptureDevice.authorizationStatus(for: .video) {
+                case .authorized:
+                    self?.presentImagePicker(type: .camera)
+                case .denied, .restricted:
+                    self?.openAlertDeniedAccessCamera()
+                case .notDetermined:
+                    AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                        if granted {
+                            self?.presentImagePicker(type: .camera)
+                        } else {
+                            self?.openAlertDeniedAccessCamera()
+                        }
+                    }
+                @unknown default:
+                    self?.openAlertDeniedAccessCamera()
+                }
             })
         }
 
@@ -93,8 +109,28 @@ class MainVC: ParentVC {
     }
 
     private func presentImagePicker(type: UIImagePickerController.SourceType) {
-        pickerController.sourceType = type
-        present(pickerController, animated: true)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.pickerController.sourceType = type
+            self.present(self.pickerController, animated: true)
+        }
+    }
+
+    private func openAlertDeniedAccessCamera() {
+        let alerVC = UIAlertController(
+            title: L10n.Profile.AvatarAlert.errorTitle,
+            message: L10n.Profile.AvatarAlert.errorDescription,
+            preferredStyle: .alert
+        )
+        alerVC.addAction(UIAlertAction(title: L10n.Profile.AvatarAlert.cancel, style: .default, handler: nil))
+        alerVC.addAction(UIAlertAction(title: L10n.Profile.AvatarAlert.errorSettings, style: .default) { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        })
+        present(alerVC, animated: true)
     }
 
     private func updateInfo() {
@@ -143,7 +179,7 @@ extension MainVC: UIImagePickerControllerDelegate, UINavigationControllerDelegat
     ) {
         picker.dismiss(animated: true) { [weak self] in
             self?.imageView.image = info[.editedImage] as? UIImage
-            self?.user.avatarURL = (info[.imageURL] as? URL)?.absoluteString
+            self?.user.avatarURL = "someUrl"
         }
     }
 

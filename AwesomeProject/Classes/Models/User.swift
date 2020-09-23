@@ -12,6 +12,6 @@ struct User {
     var avatarURL: String?
 
     var name: String {
-        "\(firstName) \(lastName)"
+        [firstName, lastName].compactMap { $0.isEmpty ? nil : $0 }.joined(separator: " ")
     }
 }

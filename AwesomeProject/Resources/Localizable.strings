@@ -3,3 +3,6 @@
 "profile.avatar-alert.from-camera" = "Сделать фото";
 "profile.avatar-alert.delete" = "Удалить";
 "profile.avatar-alert.cancel" = "Отменить";
+"profile.avatar-alert.error-title" = "Ошибка!";
+"profile.avatar-alert.error-description" = "Нет доступа к камере";
+"profile.avatar-alert.error-settings" = "В настройки";
