@@ -17,4 +17,10 @@ enum L10n {
             static let errorSettings = NSLocalizedString("profile.avatar-alert.error-settings", comment: "")
         }
     }
+
+    enum Chat {
+        static let noMessages = NSLocalizedString("chat.no-messages", comment: "")
+        static let onlineHeader = NSLocalizedString("chat.online-header", comment: "")
+        static let historyHeader = NSLocalizedString("chat.history-header", comment: "")
+    }
 }

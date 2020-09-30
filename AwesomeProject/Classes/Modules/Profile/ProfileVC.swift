@@ -5,14 +5,8 @@
 import Photos
 import UIKit
 
-class MainVC: ParentVC {
-    private var user = User(
-        id: "19837648901",
-        firstName: "Marina",
-        lastName: "Dudarenko",
-        bio: "UX/UI designer, web-designer Moscow, Russia",
-        avatarURL: nil
-    )
+class ProfileVC: ParentVC {
+    var user: User?
 
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var nameLabel: UILabel!
@@ -40,6 +34,7 @@ class MainVC: ParentVC {
 
         // Используются размеры, указанные в сториборде
         logSaveButtonFrame()
+        updateInfo()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -47,7 +42,6 @@ class MainVC: ParentVC {
 
         // Вьюха пролейаутилась -> используются размеры девайса
         logSaveButtonFrame()
-        updateInfo()
     }
 
     @IBAction func edit() {
@@ -78,12 +72,12 @@ class MainVC: ParentVC {
             })
         }
 
-        if user.avatarURL != nil {
+        if user?.avatarURL != nil {
             alert.addAction(UIAlertAction(title: L10n.Profile.AvatarAlert.delete, style: .destructive) { [weak self] _ in
                 guard let self = self else {
                     return
                 }
-                self.user.avatarURL = nil
+                self.user?.avatarURL = nil
                 self.setDefaultImageIfNeeded()
             })
         }
@@ -102,6 +96,10 @@ class MainVC: ParentVC {
             self?.saveButton.isEnabled = true
             self?.saveButton.hideLoading()
         }
+    }
+
+    @IBAction private func close() {
+        dismiss(animated: true)
     }
 
     private func logSaveButtonFrame() {
@@ -134,52 +132,29 @@ class MainVC: ParentVC {
     }
 
     private func updateInfo() {
-        nameLabel.text = user.name
-        descriptionLabel.text = user.bio
+        nameLabel.text = user?.name
+        descriptionLabel.text = user?.bio
         setDefaultImageIfNeeded()
     }
 
     private func setDefaultImageIfNeeded() {
-        if user.avatarURL == nil {
-            let text = user.firstName.firstSymbol + user.lastName.firstSymbol
-            imageView.image = generateImage(with: text, bgColor: UIColor(named: "Color/yellow"), size: imageView.frame.size)
+        if let user = user, user.avatarURL == nil {
+            let text = user.initials
+            imageView.image = AvatarHelper.generateImage(with: text, bgColor: UIColor(named: "Color/yellow"), size: imageView.frame.size)
         }
-    }
-
-    private func generateImage(with text: String, bgColor: UIColor?, size: CGSize) -> UIImage? {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: size.height * 105 / 240)
-        label.text = text
-        label.textAlignment = .center
-        label.textColor = UIColor(named: "Color/charcoal")
-
-        let bgView = UIView(frame: CGRect(origin: .zero, size: size))
-        bgView.backgroundColor = bgColor
-
-        label.frame = bgView.frame
-        bgView.addSubview(label)
-
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-        if let context = UIGraphicsGetCurrentContext() {
-            bgView.layer.render(in: context)
-        }
-        let imageWithText = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return imageWithText
     }
 }
 
 // MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
 
-extension MainVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(
         _ picker: UIImagePickerController,
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
         picker.dismiss(animated: true) { [weak self] in
             self?.imageView.image = info[.editedImage] as? UIImage
-            self?.user.avatarURL = "someUrl"
+            self?.user?.avatarURL = "someUrl"
         }
     }
 

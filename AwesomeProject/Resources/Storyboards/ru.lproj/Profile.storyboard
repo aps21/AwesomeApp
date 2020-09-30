@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cbO-Bc-K1C">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qxe-vA-hUp">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -9,19 +9,19 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--MainVC-->
+        <!--My Profile-->
         <scene sceneID="cFL-gm-1nM">
             <objects>
-                <viewController id="cbO-Bc-K1C" customClass="MainVC" customModule="AwesomeProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cbO-Bc-K1C" customClass="ProfileVC" customModule="AwesomeProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8XW-YG-leO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EPe-UT-9ZB">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="96" width="375" height="571"/>
                                 <subviews>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Z5-CC-W7R">
-                                        <rect key="frame" x="0.0" y="10" width="375" height="607"/>
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Z5-CC-W7R">
+                                        <rect key="frame" x="0.0" y="10" width="375" height="511"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zzR-hd-QhC">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="387"/>
@@ -71,7 +71,7 @@
                                         </constraints>
                                     </scrollView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xnh-Yw-10I" customClass="DefaultButton" customModule="AwesomeProject" customModuleProvider="target">
-                                        <rect key="frame" x="56.5" y="617" width="262.5" height="40"/>
+                                        <rect key="frame" x="56.5" y="521" width="262.5" height="40"/>
                                         <color key="backgroundColor" name="Color/gray"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="Mhh-bE-lvS"/>
@@ -80,7 +80,7 @@
                                         <state key="normal" title="Save"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="20"/>
+                                                <integer key="value" value="14"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="mainColor">
                                                 <color key="value" name="Color/gray"/>
@@ -101,7 +101,7 @@
                                 <edgeInsets key="layoutMargins" top="10" left="0.0" bottom="10" right="0.0"/>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EQ9-Xt-YFR">
-                                <rect key="frame" x="267.5" y="222" width="42" height="40"/>
+                                <rect key="frame" x="267.5" y="318" width="42" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="bac-6h-0J0"/>
                                 </constraints>
@@ -125,7 +125,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="mIq-PV-oaL"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Sn4-YU-wf2"/>
+                    <navigationItem key="navigationItem" title="My Profile" largeTitleDisplayMode="always" id="Sn4-YU-wf2">
+                        <barButtonItem key="rightBarButtonItem" title="Close" style="done" id="63n-4k-25c">
+                            <connections>
+                                <action selector="close" destination="cbO-Bc-K1C" id="IGm-AG-fju"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="descriptionLabel" destination="040-1k-hpC" id="L5N-Vw-euh"/>
                         <outlet property="imageView" destination="pze-mz-cgH" id="6bN-8y-eZm"/>
@@ -135,7 +141,28 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="occ-ZB-fmp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="568" y="76"/>
+            <point key="canvasLocation" x="1506.4000000000001" y="75.112443778110944"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="D69-Qy-xq9">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qxe-vA-hUp" customClass="NavigationController" customModule="AwesomeProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="aUi-Ob-g4Q">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="isClear" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <segue destination="cbO-Bc-K1C" kind="relationship" relationship="rootViewController" id="XV8-Dm-kIW"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xi4-m5-hdi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="567.20000000000005" y="75.112443778110944"/>
         </scene>
     </scenes>
     <resources>
