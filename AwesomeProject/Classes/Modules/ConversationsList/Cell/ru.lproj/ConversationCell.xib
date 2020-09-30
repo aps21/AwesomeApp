@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="ConversationCell" customModule="AwesomeProject" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="417" height="90"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="417" height="90"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="erR-O3-Lz1">
+                        <rect key="frame" x="0.0" y="0.0" width="417" height="90"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ae2-HI-f1X" customClass="RoundedImageView" customModule="AwesomeProject" customModuleProvider="target">
+                                <rect key="frame" x="16" y="21" width="48" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ae2-HI-f1X" secondAttribute="height" multiplier="1:1" id="e2r-61-Xgi"/>
+                                    <constraint firstAttribute="height" constant="48" id="ift-fQ-paU"/>
+                                </constraints>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="AH0-lb-NEF">
+                                <rect key="frame" x="77" y="25.5" width="324" height="39.5"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="7rq-rf-xwG">
+                                        <rect key="frame" x="0.0" y="0.0" width="324" height="18"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FwF-RK-Tzc">
+                                                <rect key="frame" x="0.0" y="0.0" width="262.5" height="18"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUK-3W-6QF">
+                                                <rect key="frame" x="271.5" y="0.0" width="37.5" height="18"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" name="Color/label"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" image="Conversations/next" translatesAutoresizingMaskIntoConstraints="NO" id="Xrt-Uc-xXU">
+                                                <rect key="frame" x="318" y="0.0" width="6" height="18"/>
+                                            </imageView>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fko-bt-W6i">
+                                        <rect key="frame" x="0.0" y="18" width="324" height="21.5"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="Label">
+                                                <attributes>
+                                                    <color key="NSColor" name="Color/label"/>
+                                                    <font key="NSFont" metaFont="system"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.3799999999999999" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <edgeInsets key="layoutMargins" top="16" left="16" bottom="16" right="16"/>
+                    </stackView>
+                    <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5wV-0y-eSU" customClass="NeverClearView" customModule="AwesomeProject" customModuleProvider="target">
+                        <rect key="frame" x="16" y="89.5" width="401" height="0.5"/>
+                        <color key="backgroundColor" name="Color/black"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="0.5" id="KCZ-hd-TFf"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="5wV-0y-eSU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="31h-Sd-tJ0"/>
+                    <constraint firstAttribute="trailing" secondItem="5wV-0y-eSU" secondAttribute="trailing" id="CLR-cb-wCF"/>
+                    <constraint firstAttribute="trailing" secondItem="erR-O3-Lz1" secondAttribute="trailing" id="MBC-lb-qTd"/>
+                    <constraint firstItem="erR-O3-Lz1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="QmD-gb-pAU"/>
+                    <constraint firstItem="erR-O3-Lz1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Y5E-8U-mDw"/>
+                    <constraint firstAttribute="bottom" secondItem="erR-O3-Lz1" secondAttribute="bottom" id="dtW-qv-D4P"/>
+                    <constraint firstAttribute="bottom" secondItem="5wV-0y-eSU" secondAttribute="bottom" id="hEj-oF-Nfw"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="dateLabel" destination="WUK-3W-6QF" id="zOH-kb-Xyv"/>
+                <outlet property="divider" destination="5wV-0y-eSU" id="JVK-dG-za3"/>
+                <outlet property="iconView" destination="ae2-HI-f1X" id="Doa-OW-KD7"/>
+                <outlet property="messageLabel" destination="fko-bt-W6i" id="gO8-fN-Bnv"/>
+                <outlet property="nameLabel" destination="FwF-RK-Tzc" id="ZDD-lo-1qY"/>
+            </connections>
+            <point key="canvasLocation" x="206.52173913043481" y="120.53571428571428"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Conversations/next" width="6" height="10"/>
+        <namedColor name="Color/black">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Color/label">
+            <color red="0.49411764705882355" green="0.49411764705882355" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Color/label">
+            <color red="0.49411764705882355" green="0.49411764705882355" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

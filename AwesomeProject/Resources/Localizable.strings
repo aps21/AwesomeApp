@@ -6,3 +6,7 @@
 "profile.avatar-alert.error-title" = "Ошибка!";
 "profile.avatar-alert.error-description" = "Нет доступа к камере";
 "profile.avatar-alert.error-settings" = "В настройки";
+
+"chat.no-messages" = "No messages yet";
+"chat.online-header" = "Online";
+"chat.history-header" = "History";

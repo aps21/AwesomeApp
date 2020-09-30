@@ -14,4 +14,8 @@ struct User {
     var name: String {
         [firstName, lastName].compactMap { $0.isEmpty ? nil : $0 }.joined(separator: " ")
     }
+
+    var initials: String {
+        firstName.firstSymbol + lastName.firstSymbol
+    }
 }

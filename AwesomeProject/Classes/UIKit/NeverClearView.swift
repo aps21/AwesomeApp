@@ -4,18 +4,12 @@
 
 import UIKit
 
-class RoundedImageView: UIImageView {
+class NeverClearView: UIView {
     override var backgroundColor: UIColor? {
         didSet {
             if backgroundColor != nil, backgroundColor?.cgColor.alpha == 0 {
                 backgroundColor = oldValue
             }
         }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        layer.cornerRadius = frame.height / 2
     }
 }
