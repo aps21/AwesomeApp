@@ -22,30 +22,8 @@ class ConversationsListViewController: ParentVC {
     )
 
     private lazy var data: [Int: [ConversationCellModel]] = [
-        0: [
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-            randomCellVM(isOnline: true),
-        ].sorted(by: { $0.date > $1.date }),
-        1: [
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-            randomCellVM(isOnline: false),
-        ].sorted(by: { $0.date > $1.date }),
+        0: (0 ... 20).map { _ in randomCellVM(isOnline: true) }.sorted(by: { $0.date > $1.date }),
+        1: (0 ... 20).map { _ in randomCellVM(isOnline: false) }.sorted(by: { $0.date > $1.date }),
     ]
 
     private lazy var avatarBarButtonItem: UIBarButtonItem = {
@@ -103,7 +81,7 @@ class ConversationsListViewController: ParentVC {
             message: [
                     "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.",
                     "Voluptate irure",
-                    isOnline ? "" : "Voluptate irure. Vis cu magna"
+                    ""
                 ].randomElement() ?? "",
             date: Date(timeIntervalSinceNow: TimeInterval.random(in: -1000000...0)),
             isOnline: isOnline,
