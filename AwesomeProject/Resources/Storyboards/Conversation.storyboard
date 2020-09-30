@@ -30,7 +30,7 @@
                                     <segue destination="Jge-AW-jpB" kind="embed" id="5Rk-1d-2Iz"/>
                                 </connections>
                             </containerView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="uVb-LE-ID1">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="uVb-LE-ID1">
                                 <rect key="frame" x="188.5" y="434.5" width="37" height="37"/>
                                 <color key="color" name="Color/black"/>
                             </activityIndicatorView>
