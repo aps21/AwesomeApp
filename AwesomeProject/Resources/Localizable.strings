@@ -10,3 +10,7 @@
 "chat.no-messages" = "No messages yet";
 "chat.online-header" = "Online";
 "chat.history-header" = "History";
+
+"theme.classic" = "Classic";
+"theme.day" = "Day";
+"theme.night" = "Night";

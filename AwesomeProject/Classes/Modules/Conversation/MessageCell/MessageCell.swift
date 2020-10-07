@@ -5,6 +5,7 @@
 import UIKit
 
 class MessageCell: UITableViewCell, ConfigurableView {
+    private let themeManager: ThemeManager = .shared
     private var isMine = true
 
     @IBOutlet private var bgView: UIView!
@@ -26,14 +27,10 @@ class MessageCell: UITableViewCell, ConfigurableView {
 
     func configure(with model: MessageCellModel) {
         messageLabel.text = model.text
-        bgView.backgroundColor = UIColor(named: model.isMine ? "Color/lightGreen" : "Color/gray")
+        let theme = themeManager.theme
+        bgView.backgroundColor = model.isMine ? Color.messageMyBGColor(theme: theme) : Color.messagePartnerBGColor(theme: theme)
+        messageLabel.textColor = model.isMine ? Color.messageMyTextColor(theme: theme) : Color.messagePartnerTextColor(theme: theme)
         isMine = model.isMine
         layoutIfNeeded()
-    }
-}
-
-extension MessageCell {
-    class func instanceFromNib() -> MessageCell? {
-        return UINib(nibName: String(describing: MessageCell.self), bundle: nil).instantiate(withOwner: nil)[0] as? MessageCell
     }
 }

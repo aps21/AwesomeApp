@@ -75,6 +75,12 @@ class ConversationsListViewController: ParentVC {
         performSegue(withIdentifier: Constants.profileSegue, sender: nil)
     }
 
+    override func updateColors() {
+        super.updateColors()
+        view.backgroundColor = Color.white
+        tableView.reloadData()
+    }
+
     private func randomCellVM(isOnline: Bool) -> ConversationCellModel {
         let model = ConversationCellModel(
             name: ["Ronald Robertson", "Johnny Watson", "Martha Craig", "Arthur Bell", "Jane Warren", "Morris Henry"].randomElement() ?? "",

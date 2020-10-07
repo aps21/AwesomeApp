@@ -23,4 +23,10 @@ enum L10n {
         static let onlineHeader = NSLocalizedString("chat.online-header", comment: "")
         static let historyHeader = NSLocalizedString("chat.history-header", comment: "")
     }
+
+    enum Theme {
+        static let classic = NSLocalizedString("theme.classic", comment: "")
+        static let day = NSLocalizedString("theme.day", comment: "")
+        static let night = NSLocalizedString("theme.night", comment: "")
+    }
 }

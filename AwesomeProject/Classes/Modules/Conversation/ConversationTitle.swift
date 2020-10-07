@@ -19,6 +19,7 @@ class ConversationTitle: UIView {
         imageView.layer.cornerRadius = height / 2
         let label = UILabel()
         label.text = title
+        label.textColor = Color.black
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         let stack = UIStackView(arrangedSubviews: [imageView, label])
         stack.translatesAutoresizingMaskIntoConstraints = false

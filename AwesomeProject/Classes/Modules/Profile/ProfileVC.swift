@@ -20,19 +20,9 @@ class ProfileVC: ParentVC {
         return pickerController
     }()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-
-        // Сториборд еще не прогрузился -> кнопка еще не проинициализоровалась
-        // Если бы инициализация кнопки происходила в коде,
-        // то был бы фрейм, указанный при инициализации, или .zero
-        logSaveButtonFrame()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Используются размеры, указанные в сториборде
         logSaveButtonFrame()
         updateInfo()
     }
@@ -40,7 +30,6 @@ class ProfileVC: ParentVC {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        // Вьюха пролейаутилась -> используются размеры девайса
         logSaveButtonFrame()
     }
 
@@ -100,6 +89,13 @@ class ProfileVC: ParentVC {
 
     @IBAction private func close() {
         dismiss(animated: true)
+    }
+
+    override func updateColors() {
+        super.updateColors()
+        view.backgroundColor = Color.white
+        nameLabel.textColor = Color.black
+        descriptionLabel.textColor = Color.black
     }
 
     private func logSaveButtonFrame() {

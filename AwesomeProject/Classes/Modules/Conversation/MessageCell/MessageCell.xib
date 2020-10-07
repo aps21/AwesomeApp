@@ -52,6 +52,7 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="Lb4-qo-VHn" secondAttribute="bottom" constant="10" id="O8k-3w-nIT"/>
                     <constraint firstAttribute="trailing" secondItem="Lb4-qo-VHn" secondAttribute="trailing" id="Qaw-2V-WX8"/>
@@ -59,6 +60,7 @@
                     <constraint firstItem="Lb4-qo-VHn" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="py9-td-Ryc"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="bgView" destination="Lb4-qo-VHn" id="WUH-gP-R30"/>
                 <outlet property="leadingConstraint" destination="py9-td-Ryc" id="OTd-zX-S8V"/>

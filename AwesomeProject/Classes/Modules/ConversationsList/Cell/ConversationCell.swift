@@ -7,9 +7,6 @@ import UIKit
 class ConversationCell: UITableViewCell, ConfigurableView {
     private enum Constants {
         static let colors: [UIColor] = [.red, .gray, .green, .blue, .yellow, .purple, .cyan, .magenta, .orange]
-        static let lightYellowColor = UIColor(named: "Color/lightYellow")
-        static let whiteColor = UIColor(named: "Color/white")
-        static let labelColor = UIColor(named: "Color/label")
     }
 
     @IBOutlet private var iconView: RoundedImageView!
@@ -25,24 +22,23 @@ class ConversationCell: UITableViewCell, ConfigurableView {
     }
 
     func configure(with model: ConversationCellModel) {
-        backgroundColor = model.isOnline ? Constants.lightYellowColor : Constants.whiteColor
+        backgroundColor = model.isOnline ? Color.lightYellowColor : Color.white
         iconView.backgroundColor = Constants.colors.randomElement()?.withAlphaComponent(0.5)
         nameLabel.text = model.name
+        nameLabel.textColor = Color.black
         if model.message.isEmpty {
             dateLabel.isHidden = true
+            messageLabel.text = L10n.Chat.noMessages
+            messageLabel.textColor = Color.label?.withAlphaComponent(0.5)
+            messageLabel.font = UIFont.italicSystemFont(ofSize: 13)
         } else {
             dateLabel.text = model.date.chatDate()
             dateLabel.isHidden = false
-        }
-        if model.message.isEmpty {
-            messageLabel.text = L10n.Chat.noMessages
-            messageLabel.textColor = Constants.labelColor?.withAlphaComponent(0.5)
-            messageLabel.font = UIFont.italicSystemFont(ofSize: 13)
-        } else {
             messageLabel.text = model.message
-            messageLabel.textColor = Constants.labelColor
+            messageLabel.textColor = Color.label
             messageLabel.font = model.hasUnreadMessages ? UIFont.boldSystemFont(ofSize: 13) : UIFont.systemFont(ofSize: 13)
         }
+        divider.backgroundColor = Color.black
     }
 
     func hideDivider() {

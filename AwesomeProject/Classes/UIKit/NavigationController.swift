@@ -5,7 +5,21 @@
 import UIKit
 
 class NavigationController: UINavigationController, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
+    private let themeManager: ThemeManager = .shared
+    private let notificationCenter: NotificationCenter = .default
+    private var observationTheme: NSObjectProtocol?
+
     @IBInspectable var isClear: Bool = false
+
+    public override var childForStatusBarStyle: UIViewController? {
+        topViewController
+    }
+
+    deinit {
+        if let observer = observationTheme {
+            notificationCenter.removeObserver(observer)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +43,33 @@ class NavigationController: UINavigationController, UIGestureRecognizerDelegate,
                 navigationBar.layer.shadowOpacity = 1
             }
         }
+
+        applyTheme()
+        observationTheme = notificationCenter.addObserver(forName: .themeUpdate, object: nil, queue: .main) { [weak self] _ in
+            self?.applyTheme()
+        }
+    }
+
+    private func applyTheme() {
+        let isNight = themeManager.theme == .night
+        if #available(iOS 13.0, *) {
+            let appearance = navigationBar.standardAppearance
+            appearance.backgroundColor = isNight ? Color.black2 : nil
+            if let black = Color.black {
+                appearance.titleTextAttributes = [.foregroundColor: black]
+                appearance.largeTitleTextAttributes = [.foregroundColor: black]
+            }
+            navigationBar.scrollEdgeAppearance = appearance
+            navigationBar.standardAppearance = appearance
+        } else {
+            navigationBar.barTintColor = isNight ? Color.black2 : nil
+            navigationBar.backgroundColor = isNight ? Color.black2 : nil
+            if let black = Color.black {
+                navigationBar.titleTextAttributes = [.foregroundColor: black]
+                navigationBar.largeTitleTextAttributes = [.foregroundColor: black]
+            }
+        }
+        navigationBar.barStyle = isNight ? .default : .black
     }
 
     func gestureRecognizerShouldBegin(_: UIGestureRecognizer) -> Bool {
@@ -39,4 +80,8 @@ class NavigationController: UINavigationController, UIGestureRecognizerDelegate,
         let item = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         viewController.navigationItem.backBarButtonItem = item
     }
+}
+
+extension Notification.Name {
+    static let themeUpdate = Notification.Name("themeUpdate")
 }

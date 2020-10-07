@@ -17,13 +17,18 @@ class DefaultButton: UIButton {
         return loaderView
     }()
 
-    @IBInspectable var mainColor: UIColor? = UIColor(named: "Color/gray")
-    @IBInspectable var highlightedColor: UIColor? = UIColor(named: "Color/darkGray")
+    @IBInspectable var mainColor: UIColor? = Color.lightGray
+    @IBInspectable var highlightedColor: UIColor? = Color.gray
 
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? highlightedColor : mainColor
+            updateColors()
         }
+    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        updateColors()
     }
 
     private func addLoader() {
@@ -33,6 +38,10 @@ class DefaultButton: UIButton {
             loaderView.centerXAnchor.constraint(equalTo: centerXAnchor),
             loaderView.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
+    }
+
+    private func updateColors() {
+        backgroundColor = isHighlighted ? highlightedColor : mainColor
     }
 
     func showLoading() {
