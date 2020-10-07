@@ -42,6 +42,13 @@ class ConversationViewController: ParentVC {
         reloadData()
     }
 
+    override func updateColors() {
+        super.updateColors()
+        view.backgroundColor = Color.white
+        loaderView.color = Color.black
+        tableView.reloadData()
+    }
+
     private func randomCellVM() -> MessageCellModel {
         MessageCellModel(
             text: [

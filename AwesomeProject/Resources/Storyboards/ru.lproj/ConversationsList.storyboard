@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,14 +18,13 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="36" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="uX6-mq-Xsd">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" name="Color/white"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Nxr-R0-4I0" id="SyR-DV-pmD"/>
                                     <outlet property="delegate" destination="Nxr-R0-4I0" id="HbX-yC-QdU"/>
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="uX6-mq-Xsd" secondAttribute="trailing" id="5s2-GG-Srt"/>
                             <constraint firstItem="uX6-mq-Xsd" firstAttribute="leading" secondItem="wjz-rd-dMi" secondAttribute="leading" id="NRg-cw-vqY"/>
@@ -36,7 +34,11 @@
                         <viewLayoutGuide key="safeArea" id="ipv-GB-1i9"/>
                     </view>
                     <navigationItem key="navigationItem" title="Tinkoff Chat" id="uEa-Dl-4Aq">
-                        <barButtonItem key="leftBarButtonItem" image="NavBar/settings-original" id="DpD-s0-haX"/>
+                        <barButtonItem key="leftBarButtonItem" image="NavBar/settings-original" id="DpD-s0-haX">
+                            <connections>
+                                <segue destination="1Yn-Og-ckv" kind="show" id="HKE-aG-B2I"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="uX6-mq-Xsd" id="mTC-Q4-osv"/>
@@ -57,6 +59,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oMt-0Q-bia" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1833" y="-343"/>
+        </scene>
+        <!--Themes-->
+        <scene sceneID="T3N-SE-Cqy">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Themes" id="1Yn-Og-ckv" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="k7s-VC-tV5"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MgE-r7-wGv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1172" y="186"/>
         </scene>
         <!--Conversation-->
         <scene sceneID="efl-eI-xjg">
@@ -89,8 +101,5 @@
     </scenes>
     <resources>
         <image name="NavBar/settings-original" width="25" height="25"/>
-        <namedColor name="Color/white">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
     </resources>
 </document>
