@@ -6,11 +6,18 @@ import Photos
 import UIKit
 
 class ProfileVC: ParentVC {
-    let userManager = UserFileManager()
+    let gcdManager = GCDDataManager()
+    let operationManager = OperationDataManager()
     lazy var keyboardManager: KeyboardManagerProtocol = KeyboardManager(notificationCenter: notificationCenter)
 
     private var currentAvatar: UIImage?
-    private var user: User?
+    private var user: User? {
+        didSet {
+            currentAvatar = user?.image
+            updateInfo()
+        }
+    }
+
     private var isEditingMode = false {
         didSet {
             contentViews.forEach { $0.isHidden = isEditingMode }
@@ -31,6 +38,7 @@ class ProfileVC: ParentVC {
         return pickerController
     }()
 
+    @IBOutlet private var contentStack: UIStackView!
     @IBOutlet private var scrollView: UIScrollView!
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var nameLabel: UILabel!
@@ -50,9 +58,13 @@ class ProfileVC: ParentVC {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        user = userManager.cachedUser()
-        currentAvatar = user?.image
-        updateInfo()
+        loader.startAnimating()
+        let manager: UserManager = Bool.random() ? gcdManager : operationManager
+        manager.savedUser { [weak self] savedUser in
+            self?.loader.stopAnimating()
+            self?.contentStack.isHidden = false
+            self?.user = savedUser
+        }
 
         descriptionTextView.layer.cornerRadius = 7
         descriptionTextView.layer.borderColor = Color.gray?.cgColor
@@ -119,20 +131,25 @@ class ProfileVC: ParentVC {
         button.showLoading()
         loader.startAnimating()
 
-        let myManager: UserManager = button == saveGCDButton ? GCDDataManager() : OperationDataManager()
-        myManager.save(name: nameTextField.text, bio: descriptionTextView.text, avatar: currentAvatar) { [weak self] success in
-            DispatchQueue.main.async { [weak self] in
-                if success {
-                    self?.openSuccessAlert()
-                    self?.user = myManager.cachedUser()
-                    self?.isEditingMode = false
-                    self?.updateSavingButtons()
-                } else {
-                    self?.openFailureAlert(button)
-                }
-                self?.loader.stopAnimating()
-                button.hideLoading()
+        let manager: UserManager = button == saveGCDButton ? gcdManager : operationManager
+        manager.save(name: nameTextField.text, bio: descriptionTextView.text, avatar: currentAvatar) { [weak self] success in
+            if success {
+                self?.view.endEditing(true)
+                self?.openSuccessAlert()
+                let currentUserInfo = User(
+                    name: self?.nameTextField.text,
+                    bio: self?.descriptionTextView.text,
+                    imageData: self?.currentAvatar?.pngData()
+                )
+                self?.user = currentUserInfo
+                self?.notificationCenter.post(name: .userUpdate, object: currentUserInfo)
+                self?.isEditingMode = false
+                self?.updateSavingButtons()
+            } else {
+                self?.openFailureAlert(button)
             }
+            self?.loader.stopAnimating()
+            button.hideLoading()
         }
     }
 
@@ -172,6 +189,7 @@ class ProfileVC: ParentVC {
         present(alerVC, animated: true)
     }
 
+    // TODO: L10n
     private func openSuccessAlert() {
         let alerVC = UIAlertController(
             title: "Данные сохранены",
@@ -213,7 +231,7 @@ class ProfileVC: ParentVC {
 
     private func setDefaultImageIfNeeded() {
         if user?.imageData == nil {
-            imageView.image = userManager.avatarImage(userData: user, height: imageView.frame.height)
+            imageView.image = gcdManager.avatarImage(userData: user, height: imageView.frame.height)
         }
     }
 }
@@ -251,12 +269,12 @@ extension ProfileVC: UITextViewDelegate {
 
     func textViewDidChange(_ textView: UITextView) {
         updateSavingButtons()
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
-            self?.scrollToVisibleRect(with: textView)
-        }
     }
 
     private func scrollToVisibleRect(with textView: UITextView) {
-        scrollView.scrollRectToVisible(textView.frame, animated: true)
+        guard let frame = textView.superview?.convert(textView.frame, to: scrollView) else {
+            return
+        }
+        scrollView.scrollRectToVisible(frame, animated: true)
     }
 }

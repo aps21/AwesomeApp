@@ -36,7 +36,7 @@ class UserFileManager {
         }
     }
 
-    func cachedUser() -> User? {
+    func savedUser() -> User? {
         if let fileURL = fileURL {
             do {
                 let data = try Data(contentsOf: fileURL)
@@ -46,23 +46,5 @@ class UserFileManager {
             }
         }
         return nil
-    }
-
-    func avatarImage(userData: User? = nil, height: CGFloat) -> UIImage? {
-        let user = userData ?? cachedUser()
-        if let image = user?.image {
-            let size = CGSize(width: height, height: height)
-            let rect = CGRect(origin: .zero, size: size)
-            UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-            image.draw(in: rect)
-            let newImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return newImage
-        }
-        return AvatarHelper.generateImage(
-            with: user?.initials,
-            bgColor: UIColor(named: "Color/yellow"),
-            size: CGSize(width: height, height: height)
-        )
     }
 }

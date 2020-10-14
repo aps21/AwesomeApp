@@ -84,4 +84,5 @@ class NavigationController: UINavigationController, UIGestureRecognizerDelegate,
 
 extension Notification.Name {
     static let themeUpdate = Notification.Name("themeUpdate")
+    static let userUpdate = Notification.Name("userUpdate")
 }

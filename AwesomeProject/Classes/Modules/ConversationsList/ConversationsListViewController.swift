@@ -13,7 +13,8 @@ class ConversationsListViewController: ParentVC {
         static let avatarHeight: CGFloat = 40
     }
 
-    private let fileManager = UserFileManager()
+    private var observationUser: NSObjectProtocol?
+    private let userManager = GCDDataManager()
 
     private lazy var data: [Int: [ConversationCellModel]] = [
         0: (0 ... 20).map { _ in randomCellVM(isOnline: true) }.sorted(by: { $0.date > $1.date }),
@@ -34,11 +35,23 @@ class ConversationsListViewController: ParentVC {
 
     @IBOutlet private var tableView: UITableView!
 
+    deinit {
+        if let observer = observationUser {
+            notificationCenter.removeObserver(observer)
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = avatarBarButtonItem
-        didUpdateUser()
+        userManager.savedUser { [weak self] user in
+            self?.didUpdateUser(user: user)
+        }
+
+        observationUser = notificationCenter.addObserver(forName: .userUpdate, object: nil, queue: .main) { [weak self] notification in
+            let user = notification.object as? User
+            self?.didUpdateUser(user: user)
+        }
 
         tableView.contentInset.bottom = 50
         tableView.register(UINib(nibName: Constants.cellReuseId, bundle: nil), forCellReuseIdentifier: Constants.cellReuseId)
@@ -67,9 +80,10 @@ class ConversationsListViewController: ParentVC {
         performSegue(withIdentifier: Constants.profileSegue, sender: nil)
     }
 
-    private func didUpdateUser() {
-        let image = fileManager.avatarImage(height: Constants.avatarHeight)
+    private func didUpdateUser(user: User?) {
+        let image = userManager.avatarImage(userData: user, height: Constants.avatarHeight)
         avatarButton.setImage(image, for: .normal)
+        navigationItem.rightBarButtonItem = avatarBarButtonItem
     }
 
     private func randomCellVM(isOnline: Bool) -> ConversationCellModel {
