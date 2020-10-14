@@ -2,20 +2,19 @@
 // AwesomeProject
 //
 
-import Foundation
+import UIKit
 
-struct User {
-    let id: String
-    let firstName: String
-    let lastName: String
-    let bio: String
-    var avatarURL: String?
+struct User: Codable {
+    let name: String?
+    let bio: String?
+    let imageData: Data?
 
-    var name: String {
-        [firstName, lastName].compactMap { $0.isEmpty ? nil : $0 }.joined(separator: " ")
+    var image: UIImage? {
+        imageData.flatMap { UIImage(data: $0) }
     }
 
     var initials: String {
-        firstName.firstSymbol + lastName.firstSymbol
+        let nameItems = name?.split(separator: " ") ?? []
+        return (nameItems.first?.description.firstSymbol ?? "") + (nameItems.dropFirst().first?.description.firstSymbol ?? "")
     }
 }
