@@ -6,12 +6,23 @@ import Photos
 import UIKit
 
 class ProfileVC: ParentVC {
-    var user: User?
+    let userManager = UserFileManager()
+    lazy var keyboardManager: KeyboardManagerProtocol = KeyboardManager(notificationCenter: notificationCenter)
 
-    @IBOutlet private var imageView: UIImageView!
-    @IBOutlet private var nameLabel: UILabel!
-    @IBOutlet private var descriptionLabel: UILabel!
-    @IBOutlet private var saveButton: DefaultButton!
+    private var currentAvatar: UIImage?
+    private var user: User?
+    private var isEditingMode = false {
+        didSet {
+            contentViews.forEach { $0.isHidden = isEditingMode }
+            editingViews.forEach { $0.isHidden = !isEditingMode }
+
+            if isEditingMode {
+                editButton.title = "Cancel"
+            } else {
+                editButton.title = "Edit profile"
+            }
+        }
+    }
 
     private lazy var pickerController: UIImagePickerController = {
         let pickerController = UIImagePickerController()
@@ -20,20 +31,43 @@ class ProfileVC: ParentVC {
         return pickerController
     }()
 
+    @IBOutlet private var scrollView: UIScrollView!
+    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet private var nameLabel: UILabel!
+    @IBOutlet private var descriptionLabel: UILabel!
+    @IBOutlet private var saveGCDButton: DefaultButton!
+    @IBOutlet private var saveOperationButton: DefaultButton!
+    @IBOutlet private var editButton: UIBarButtonItem!
+    // TODO: Remove later
+    @IBOutlet private var loader: UIActivityIndicatorView!
+
+    @IBOutlet private var nameTextField: UITextField!
+    @IBOutlet private var descriptionTextView: UITextView!
+
+    @IBOutlet private var contentViews: [UIView]!
+    @IBOutlet private var editingViews: [UIView]!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        logSaveButtonFrame()
+        user = userManager.cachedUser()
+        currentAvatar = user?.image
         updateInfo()
-    }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        descriptionTextView.layer.cornerRadius = 7
+        descriptionTextView.layer.borderColor = Color.gray?.cgColor
+        descriptionTextView.layer.borderWidth = 1
 
-        logSaveButtonFrame()
+        keyboardManager.bindToKeyboardNotifications(scrollView: scrollView)
+        addTapToHideKeyboardGesture()
+
     }
 
     @IBAction func edit() {
+        isEditingMode.toggle()
+    }
+
+    @IBAction func editAvatar() {
         let alert = UIAlertController(title: L10n.Profile.AvatarAlert.title, message: nil, preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: L10n.Profile.AvatarAlert.fromGallery, style: .default) { [weak self] _ in
@@ -61,13 +95,14 @@ class ProfileVC: ParentVC {
             })
         }
 
-        if user?.avatarURL != nil {
+        if currentAvatar != nil {
             alert.addAction(UIAlertAction(title: L10n.Profile.AvatarAlert.delete, style: .destructive) { [weak self] _ in
                 guard let self = self else {
                     return
                 }
-                self.user?.avatarURL = nil
+                self.currentAvatar = nil
                 self.setDefaultImageIfNeeded()
+                self.updateSavingButtons(didChangeImage: true)
             })
         }
 
@@ -77,13 +112,27 @@ class ProfileVC: ParentVC {
         present(alert, animated: true)
     }
 
-    @IBAction private func save() {
-        saveButton.isEnabled = false
-        saveButton.showLoading()
+    @IBAction private func save(button: DefaultButton) {
+        saveGCDButton.isEnabled = false
+        saveOperationButton.isEnabled = false
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.saveButton.isEnabled = true
-            self?.saveButton.hideLoading()
+        button.showLoading()
+        loader.startAnimating()
+
+        let myManager: UserManager = button == saveGCDButton ? GCDDataManager() : OperationDataManager()
+        myManager.save(name: nameTextField.text, bio: descriptionTextView.text, avatar: currentAvatar) { [weak self] success in
+            DispatchQueue.main.async { [weak self] in
+                if success {
+                    self?.openSuccessAlert()
+                    self?.user = myManager.cachedUser()
+                    self?.isEditingMode = false
+                    self?.updateSavingButtons()
+                } else {
+                    self?.openFailureAlert(button)
+                }
+                self?.loader.stopAnimating()
+                button.hideLoading()
+            }
         }
     }
 
@@ -96,10 +145,6 @@ class ProfileVC: ParentVC {
         view.backgroundColor = Color.white
         nameLabel.textColor = Color.black
         descriptionLabel.textColor = Color.black
-    }
-
-    private func logSaveButtonFrame() {
-        log(message: "saveButton.frame = \(saveButton?.frame.debugDescription ?? "no value")")
     }
 
     private func presentImagePicker(type: UIImagePickerController.SourceType) {
@@ -127,16 +172,48 @@ class ProfileVC: ParentVC {
         present(alerVC, animated: true)
     }
 
+    private func openSuccessAlert() {
+        let alerVC = UIAlertController(
+            title: "Данные сохранены",
+            message: nil,
+            preferredStyle: .alert
+        )
+        alerVC.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
+        present(alerVC, animated: true)
+    }
+
+    private func openFailureAlert(_ saveButton: DefaultButton) {
+        let alerVC = UIAlertController(
+            title: "Ошибка",
+            message: "Не удалось сохранить данные",
+            preferredStyle: .alert
+        )
+        alerVC.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
+        alerVC.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] _ in self?.save(button: saveButton) }))
+        present(alerVC, animated: true)
+    }
+
     private func updateInfo() {
         nameLabel.text = user?.name
         descriptionLabel.text = user?.bio
-        setDefaultImageIfNeeded()
+        nameTextField.text = user?.name
+        descriptionTextView.text = user?.bio
+        if let avatar = user?.image {
+            imageView.image = avatar
+        } else {
+            setDefaultImageIfNeeded()
+        }
+    }
+
+    private func updateSavingButtons(didChangeImage: Bool = false) {
+        let didChangeData = didChangeImage || nameTextField.text != (user?.name ?? "") || descriptionTextView.text != (user?.bio ?? "")
+        saveGCDButton.isEnabled = didChangeData
+        saveOperationButton.isEnabled = didChangeData
     }
 
     private func setDefaultImageIfNeeded() {
-        if let user = user, user.avatarURL == nil {
-            let text = user.initials
-            imageView.image = AvatarHelper.generateImage(with: text, bgColor: UIColor(named: "Color/yellow"), size: imageView.frame.size)
+        if user?.imageData == nil {
+            imageView.image = userManager.avatarImage(userData: user, height: imageView.frame.height)
         }
     }
 }
@@ -149,12 +226,37 @@ extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDele
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
         picker.dismiss(animated: true) { [weak self] in
-            self?.imageView.image = info[.editedImage] as? UIImage
-            self?.user?.avatarURL = "someUrl"
+            let image = info[.editedImage] as? UIImage
+            self?.imageView.image = image
+            self?.currentAvatar = image
+            self?.updateSavingButtons(didChangeImage: true)
         }
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
+    }
+}
+
+extension ProfileVC: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_: UITextField) {
+        updateSavingButtons()
+    }
+}
+
+extension ProfileVC: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        scrollToVisibleRect(with: textView)
+    }
+
+    func textViewDidChange(_ textView: UITextView) {
+        updateSavingButtons()
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
+            self?.scrollToVisibleRect(with: textView)
+        }
+    }
+
+    private func scrollToVisibleRect(with textView: UITextView) {
+        scrollView.scrollRectToVisible(textView.frame, animated: true)
     }
 }

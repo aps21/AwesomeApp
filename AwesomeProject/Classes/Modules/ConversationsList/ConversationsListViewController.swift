@@ -10,16 +10,10 @@ class ConversationsListViewController: ParentVC {
         static let headerReuseId = String(describing: ConversationsHeader.self)
         static let profileSegue = "profile"
         static let conversationSegue = "conversation"
+        static let avatarHeight: CGFloat = 40
     }
 
-    // TODO: Temp data
-    private var user = User(
-        id: "19837648901",
-        firstName: "Marina",
-        lastName: "Dudarenko",
-        bio: "UX/UI designer, web-designer Moscow, Russia",
-        avatarURL: nil
-    )
+    private let fileManager = UserFileManager()
 
     private lazy var data: [Int: [ConversationCellModel]] = [
         0: (0 ... 20).map { _ in randomCellVM(isOnline: true) }.sorted(by: { $0.date > $1.date }),
@@ -31,15 +25,8 @@ class ConversationsListViewController: ParentVC {
     }()
 
     private lazy var avatarButton: UIButton = {
-        let height: CGFloat = 40
-        let image = AvatarHelper.generateImage(
-            with: user.initials,
-            bgColor: UIColor(named: "Color/yellow"),
-            size: CGSize(width: height, height: height)
-        )
-        let button = SimpleImageButton()
-        button.setImage(image, for: .normal)
-        button.layer.cornerRadius = height / 2
+        let button = SimpleImageButton(frame: CGRect(x: 0, y: 0, width: Constants.avatarHeight, height: Constants.avatarHeight))
+        button.layer.cornerRadius = Constants.avatarHeight / 2
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
         return button
@@ -51,6 +38,7 @@ class ConversationsListViewController: ParentVC {
         super.viewDidLoad()
 
         navigationItem.rightBarButtonItem = avatarBarButtonItem
+        didUpdateUser()
 
         tableView.contentInset.bottom = 50
         tableView.register(UINib(nibName: Constants.cellReuseId, bundle: nil), forCellReuseIdentifier: Constants.cellReuseId)
@@ -63,11 +51,15 @@ class ConversationsListViewController: ParentVC {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
 
-        if let destination = (segue.destination as? UINavigationController)?.topViewController as? ProfileVC {
-            destination.user = user
-        } else if let destination = segue.destination as? ConversationViewController {
+        if let destination = segue.destination as? ConversationViewController {
             destination.conversation = sender as? ConversationCellModel
         }
+    }
+
+    override func updateColors() {
+        super.updateColors()
+        view.backgroundColor = Color.white
+        tableView.reloadData()
     }
 
     @objc
@@ -75,10 +67,9 @@ class ConversationsListViewController: ParentVC {
         performSegue(withIdentifier: Constants.profileSegue, sender: nil)
     }
 
-    override func updateColors() {
-        super.updateColors()
-        view.backgroundColor = Color.white
-        tableView.reloadData()
+    private func didUpdateUser() {
+        let image = fileManager.avatarImage(height: Constants.avatarHeight)
+        avatarButton.setImage(image, for: .normal)
     }
 
     private func randomCellVM(isOnline: Bool) -> ConversationCellModel {

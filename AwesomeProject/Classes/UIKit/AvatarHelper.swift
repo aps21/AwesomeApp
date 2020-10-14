@@ -5,10 +5,10 @@
 import UIKit
 
 class AvatarHelper {
-    static func generateImage(with text: String, bgColor: UIColor?, size: CGSize) -> UIImage? {
+    static func generateImage(with text: String?, bgColor: UIColor?, size: CGSize) -> UIImage? {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: size.height * 105 / 240)
-        label.text = text
+        label.text = text ?? "🐈"
         label.textAlignment = .center
         label.textColor = UIColor(named: "Color/charcoal")
 
