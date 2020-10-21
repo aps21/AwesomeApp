@@ -5,6 +5,10 @@
 import UIKit
 
 struct User: Codable {
+    var senderId: String? {
+        UIDevice.current.identifierForVendor?.uuidString
+    }
+
     let name: String?
     let bio: String?
     let imageData: Data?

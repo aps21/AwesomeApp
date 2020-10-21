@@ -66,9 +66,11 @@ class ProfileVC: ParentVC {
             self?.user = savedUser
         }
 
-        descriptionTextView.layer.cornerRadius = 7
-        descriptionTextView.layer.borderColor = Color.gray?.cgColor
-        descriptionTextView.layer.borderWidth = 1
+        [nameTextField, descriptionTextView].forEach { (view: UIView) in
+            view.layer.cornerRadius = 7
+            view.layer.borderColor = Color.gray?.cgColor
+            view.layer.borderWidth = 1
+        }
 
         keyboardManager.bindToKeyboardNotifications(scrollView: scrollView)
         addTapToHideKeyboardGesture()
@@ -118,7 +120,6 @@ class ProfileVC: ParentVC {
             })
         }
 
-
         alert.addAction(UIAlertAction(title: L10n.Profile.AvatarAlert.cancel, style: .cancel, handler: nil))
 
         present(alert, animated: true)
@@ -159,9 +160,17 @@ class ProfileVC: ParentVC {
 
     override func updateColors() {
         super.updateColors()
+
         view.backgroundColor = Color.white
+
         nameLabel.textColor = Color.black
         descriptionLabel.textColor = Color.black
+
+        nameTextField.backgroundColor = Color.white
+        nameTextField.textColor = Color.black
+
+        descriptionTextView.backgroundColor = Color.white
+        descriptionTextView.textColor = Color.black
     }
 
     private func presentImagePicker(type: UIImagePickerController.SourceType) {
@@ -176,7 +185,7 @@ class ProfileVC: ParentVC {
 
     private func openAlertDeniedAccessCamera() {
         let alerVC = UIAlertController(
-            title: L10n.Profile.AvatarAlert.errorTitle,
+            title: L10n.Alert.errorTitle,
             message: L10n.Profile.AvatarAlert.errorDescription,
             preferredStyle: .alert
         )
@@ -257,7 +266,7 @@ extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDele
 }
 
 extension ProfileVC: UITextFieldDelegate {
-    func textFieldDidChangeSelection(_: UITextField) {
+    func textFieldDidChange(_: UITextField) {
         updateSavingButtons()
     }
 }

@@ -8,6 +8,8 @@ class GCDDataManager: UserManager {
     private let fileManager = UserFileManager()
     private let queue = DispatchQueue.global(qos: .default)
 
+    private(set) var user: User?
+
     func save(name: String?, bio: String?, avatar: UIImage?, completion: @escaping (_ success: Bool) -> Void) {
         let mainCompletion = { success in
             DispatchQueue.main.async {
@@ -15,8 +17,6 @@ class GCDDataManager: UserManager {
             }
         }
         queue.async {
-            // TODO: Just for test, remove later
-            sleep(2)
             self.fileManager.save(name: name, bio: bio, avatar: avatar, completion: mainCompletion)
         }
     }
@@ -24,8 +24,7 @@ class GCDDataManager: UserManager {
     func savedUser(completion: @escaping (User?) -> Void) {
         queue.async {
             let user = self.fileManager.savedUser()
-            // TODO: Just for test, remove later
-            sleep(2)
+            self.user = user
             DispatchQueue.main.sync {
                 completion(user)
             }

@@ -5,12 +5,17 @@
 import UIKit
 
 protocol UserManager {
+    var user: User? { get }
     func save(name: String?, bio: String?, avatar: UIImage?, completion: @escaping (_ success: Bool) -> Void)
     func savedUser(completion: @escaping (User?) -> Void)
     func avatarImage(userData: User?, height: CGFloat) -> UIImage?
 }
 
 extension UserManager {
+    var user: User? {
+        nil
+    }
+
     func avatarImage(userData: User?, height: CGFloat) -> UIImage? {
         let user = userData
         if let image = user?.image {

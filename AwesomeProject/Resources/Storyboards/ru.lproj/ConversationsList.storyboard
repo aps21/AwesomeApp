@@ -4,21 +4,22 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Tinkoff Chat-->
+        <!--Conversations-->
         <scene sceneID="zea-Ne-Hz4">
             <objects>
-                <viewController id="Nxr-R0-4I0" customClass="ConversationsListViewController" customModule="AwesomeProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Nxr-R0-4I0" userLabel="Conversations" customClass="ConversationsListViewController" customModule="AwesomeProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wjz-rd-dMi">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="36" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="uX6-mq-Xsd">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="36" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uX6-mq-Xsd">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Nxr-R0-4I0" id="SyR-DV-pmD"/>
                                     <outlet property="delegate" destination="Nxr-R0-4I0" id="HbX-yC-QdU"/>
@@ -33,12 +34,20 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ipv-GB-1i9"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Tinkoff Chat" id="uEa-Dl-4Aq">
-                        <barButtonItem key="leftBarButtonItem" image="NavBar/settings-original" id="DpD-s0-haX">
-                            <connections>
-                                <segue destination="1Yn-Og-ckv" kind="show" id="HKE-aG-B2I"/>
-                            </connections>
-                        </barButtonItem>
+                    <navigationItem key="navigationItem" title="Channels" id="uEa-Dl-4Aq">
+                        <leftBarButtonItems>
+                            <barButtonItem image="NavBar/settings-original" id="DpD-s0-haX">
+                                <connections>
+                                    <segue destination="1Yn-Og-ckv" kind="show" id="HKE-aG-B2I"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="add" id="non-b7-nQs">
+                                <color key="tintColor" name="Color/charcoal"/>
+                                <connections>
+                                    <action selector="addChannel" destination="Nxr-R0-4I0" id="Gbt-c5-x7P"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="uX6-mq-Xsd" id="mTC-Q4-osv"/>
@@ -101,5 +110,8 @@
     </scenes>
     <resources>
         <image name="NavBar/settings-original" width="25" height="25"/>
+        <namedColor name="Color/charcoal">
+            <color red="0.21176470588235294" green="0.21568627450980393" blue="0.2196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

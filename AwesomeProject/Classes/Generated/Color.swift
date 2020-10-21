@@ -69,7 +69,7 @@ enum Color {
         }
     }
 
-    static func messagePartnerBGColor(theme: Theme) ->  UIColor? {
+    static func messagePartnerBGColor(theme: Theme) -> UIColor? {
         switch theme {
         case .classic:
             return UIColor(named: "Color/white2")
@@ -80,7 +80,7 @@ enum Color {
         }
     }
 
-    static func messageMyBGColor(theme: Theme) ->  UIColor? {
+    static func messageMyBGColor(theme: Theme) -> UIColor? {
         switch theme {
         case .classic:
             return UIColor(named: "Color/lightGreen")
@@ -91,7 +91,7 @@ enum Color {
         }
     }
 
-    static func messageMyTextColor(theme: Theme) ->  UIColor? {
+    static func messageMyTextColor(theme: Theme) -> UIColor? {
         switch theme {
         case .classic:
             return UIColor(named: "Color/black")
@@ -100,7 +100,7 @@ enum Color {
         }
     }
 
-    static func messagePartnerTextColor(theme: Theme) ->  UIColor? {
+    static func messagePartnerTextColor(theme: Theme) -> UIColor? {
         switch theme {
         case .classic, .day:
             return UIColor(named: "Color/black")

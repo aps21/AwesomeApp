@@ -5,10 +5,6 @@
 import UIKit
 
 class ConversationCell: UITableViewCell, ConfigurableView {
-    private enum Constants {
-        static let colors: [UIColor] = [.red, .gray, .green, .blue, .yellow, .purple, .cyan, .magenta, .orange]
-    }
-
     @IBOutlet private var iconView: RoundedImageView!
     @IBOutlet private var nameLabel: UILabel!
     @IBOutlet private var dateLabel: UILabel!
@@ -22,21 +18,18 @@ class ConversationCell: UITableViewCell, ConfigurableView {
     }
 
     func configure(with model: ConversationCellModel) {
-        backgroundColor = model.isOnline ? Color.lightYellowColor : Color.white
-        iconView.backgroundColor = Constants.colors.randomElement()?.withAlphaComponent(0.5)
+        iconView.backgroundColor = model.color
         nameLabel.text = model.name
         nameLabel.textColor = Color.black
+        dateLabel.text = model.date?.chatDate()
         if model.message.isEmpty {
-            dateLabel.isHidden = true
             messageLabel.text = L10n.Chat.noMessages
             messageLabel.textColor = Color.label?.withAlphaComponent(0.5)
             messageLabel.font = UIFont.italicSystemFont(ofSize: 13)
         } else {
-            dateLabel.text = model.date.chatDate()
-            dateLabel.isHidden = false
             messageLabel.text = model.message
             messageLabel.textColor = Color.label
-            messageLabel.font = model.hasUnreadMessages ? UIFont.boldSystemFont(ofSize: 13) : UIFont.systemFont(ofSize: 13)
+            messageLabel.font = UIFont.systemFont(ofSize: 13)
         }
         divider.backgroundColor = Color.black
     }
