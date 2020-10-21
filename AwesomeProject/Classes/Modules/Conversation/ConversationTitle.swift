@@ -5,13 +5,13 @@
 import UIKit
 
 class ConversationTitle: UIView {
-    init(title: String) {
+    init(title: String, color: UIColor?) {
         super.init(frame: .zero)
 
         let height: CGFloat = 40
         let image = AvatarHelper.generateImage(
             with: title.split(separator: " ").map { $0.description.firstSymbol }.joined(separator: ""),
-            bgColor: UIColor(named: "Color/yellow"),
+            bgColor: color ?? UIColor(named: "Color/yellow"),
             size: CGSize(width: height, height: height)
         )
         let imageView = UIImageView(image: image)
@@ -27,12 +27,14 @@ class ConversationTitle: UIView {
         stack.alignment = .center
 
         addSubview(stack)
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
+        NSLayoutConstraint.activate(
+            [
+                stack.leadingAnchor.constraint(equalTo: leadingAnchor),
+                stack.topAnchor.constraint(equalTo: topAnchor),
+                stack.trailingAnchor.constraint(equalTo: trailingAnchor),
+                stack.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ]
+        )
         stack.sizeToFit()
         frame = stack.frame
     }

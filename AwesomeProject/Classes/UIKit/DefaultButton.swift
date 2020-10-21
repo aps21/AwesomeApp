@@ -34,10 +34,12 @@ class DefaultButton: UIButton {
     private func addLoader() {
         loaderView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(loaderView)
-        NSLayoutConstraint.activate([
-            loaderView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            loaderView.centerYAnchor.constraint(equalTo: centerYAnchor),
-        ])
+        NSLayoutConstraint.activate(
+            [
+                loaderView.centerXAnchor.constraint(equalTo: centerXAnchor),
+                loaderView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            ]
+        )
     }
 
     private func updateColors() {

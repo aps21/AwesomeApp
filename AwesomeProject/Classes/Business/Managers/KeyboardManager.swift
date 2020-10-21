@@ -39,11 +39,14 @@ enum KeyboardManagerEvent {
 }
 
 protocol KeyboardManagerProtocol: AnyObject {
+    var eventClosure: KeyboardManagerEventClosure? { get set }
     func bindToKeyboardNotifications(scrollView: UIScrollView)
+    func bindToKeyboardNotifications(superview: UIView, bottomConstraint: NSLayoutConstraint, bottomOffset: CGFloat)
 }
 
 final class KeyboardManager {
     let notificationCenter: NotificationCenter
+    var eventClosure: KeyboardManagerEventClosure?
 
     init(notificationCenter: NotificationCenter) {
         self.notificationCenter = notificationCenter
@@ -90,6 +93,7 @@ final class KeyboardManager {
     }
 
     private func invokeClosures(_ event: KeyboardManagerEvent) {
+        eventClosure?(event)
         innerEventClosures.forEach { $0(event) }
     }
 
@@ -116,6 +120,19 @@ extension KeyboardManager: KeyboardManagerProtocol {
         let initialScrollViewInsets = scrollView.contentInset
         let closure = { [unowned self] event in
             self.handle(by: scrollView, event: event, initialInset: initialScrollViewInsets)
+        }
+        innerEventClosures += [closure]
+    }
+
+    func bindToKeyboardNotifications(superview: UIView, bottomConstraint: NSLayoutConstraint, bottomOffset: CGFloat) {
+        let closure: KeyboardManagerEventClosure = {
+            switch $0 {
+            case let .willShow(data), let .willFrameChange(data):
+                bottomConstraint.constant = -data.frame.end.size.height
+            case .willHide:
+                bottomConstraint.constant = -bottomOffset
+            }
+            superview.layoutIfNeeded()
         }
         innerEventClosures += [closure]
     }

@@ -55,7 +55,6 @@
                                         <attributedString key="attributedText">
                                             <fragment content="Label">
                                                 <attributes>
-                                                    <color key="NSColor" name="Color/label"/>
                                                     <font key="NSFont" metaFont="system"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.3799999999999999" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
@@ -86,6 +85,7 @@
                     <constraint firstAttribute="bottom" secondItem="5wV-0y-eSU" secondAttribute="bottom" id="hEj-oF-Nfw"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="dateLabel" destination="WUK-3W-6QF" id="zOH-kb-Xyv"/>
                 <outlet property="divider" destination="5wV-0y-eSU" id="JVK-dG-za3"/>
@@ -100,9 +100,6 @@
         <image name="Conversations/next" width="6" height="10"/>
         <namedColor name="Color/black">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="Color/label">
-            <color red="0.49411764705882355" green="0.49411764705882355" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Color/label">
             <color red="0.49411764705882355" green="0.49411764705882355" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
