@@ -45,6 +45,6 @@ class UserFileManager {
                 print(error)
             }
         }
-        return nil
+        return User(name: "Marina D", bio: "UI designer from LA", imageData: nil)
     }
 }
