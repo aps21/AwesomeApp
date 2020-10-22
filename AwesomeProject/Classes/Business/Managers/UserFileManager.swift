@@ -42,7 +42,7 @@ class UserFileManager {
                 let data = try Data(contentsOf: fileURL)
                 return try decoder.decode(User.self, from: data)
             } catch {
-                return User(name: "Marina D", bio: "UI designer from LA", imageData: nil)
+                return nil
             }
         }
         return User(name: "Marina D", bio: "UI designer from LA", imageData: nil)
