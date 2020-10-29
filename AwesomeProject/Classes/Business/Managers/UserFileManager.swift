@@ -37,13 +37,10 @@ class UserFileManager {
     }
 
     func savedUser() -> User? {
-        if let fileURL = fileURL {
-            do {
-                let data = try Data(contentsOf: fileURL)
-                return try decoder.decode(User.self, from: data)
-            } catch {
-                return nil
-            }
+        if let fileURL = fileURL,
+            let data = try? Data(contentsOf: fileURL),
+            let user = try? decoder.decode(User.self, from: data) {
+            return user
         }
         return User(name: "Marina D", bio: "UI designer from LA", imageData: nil)
     }

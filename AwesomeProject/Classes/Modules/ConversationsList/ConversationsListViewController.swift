@@ -13,10 +13,12 @@ class ConversationsListViewController: ParentVC {
         static let avatarHeight: CGFloat = 40
     }
 
+    private let coreDataStack = CoreDataStack.shared
+    private let userManager = GCDDataManager()
+
     private var observationUser: NSObjectProtocol?
     private var isInitial = true
     private var user: User?
-    private let userManager = GCDDataManager()
 
     private lazy var database = Firestore.firestore()
     private lazy var channelsReference = database.collection("channels")
@@ -110,43 +112,49 @@ class ConversationsListViewController: ParentVC {
                 return
             }
 
-            snapshot.documentChanges.forEach { diff in
-                let document = diff.document
-                let id = document.documentID
+            self.coreDataStack.performSave { context in
+                snapshot.documentChanges.forEach { diff in
+                    let document = diff.document
+                    let id = document.documentID
 
-                let index = self.data.firstIndex(where: { $0.identifier == id })
-                switch diff.type {
-                case .added, .modified:
-                    let channel = Channel(id: id, dictionary: document.data())
-                    if let index = index {
-                        self.data.remove(at: index)
-                        if let channel = channel {
+                    let index = self.data.firstIndex(where: { $0.identifier == id })
+                    switch diff.type {
+                    case .added, .modified:
+                        _ = DBChannel(id: id, dictionary: document.data(), in: context)
+                        let channel = Channel(id: id, dictionary: document.data())
+                        if let index = index {
+                            self.data.remove(at: index)
+                            if let channel = channel {
+                                self.data.insert(channel, at: 0)
+                            }
+                        } else if let channel = channel {
                             self.data.insert(channel, at: 0)
                         }
-                    } else if let channel = channel {
-                        self.data.insert(channel, at: 0)
-                    }
-                case .removed:
-                    if let index = index {
-                        self.data.remove(at: index)
+                    case .removed:
+                        if let index = index {
+                            self.data.remove(at: index)
+                        }
                     }
                 }
-            }
 
-            if self.isInitial {
-                self.isInitial = false
-                self.data = self.data.sorted(by: { channel1, channel2 in
-                    switch (channel1.lastActivity, channel2.lastActivity) {
-                    case let (.some(activity1), .some(activity2)):
-                        return activity1 >= activity2
-                    case (.none, _):
-                        return false
-                    case (_, .none):
-                        return true
-                    }
-                })
+                if self.isInitial {
+                    self.isInitial = false
+                    self.data = self.data.sorted(by: { channel1, channel2 in
+                        switch (channel1.lastActivity, channel2.lastActivity) {
+                        case let (.some(activity1), .some(activity2)):
+                            return activity1 >= activity2
+                        case (.none, _):
+                            return false
+                        case (_, .none):
+                            return true
+                        }
+                    })
+                }
+
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
-            self.tableView.reloadData()
         }
     }
 

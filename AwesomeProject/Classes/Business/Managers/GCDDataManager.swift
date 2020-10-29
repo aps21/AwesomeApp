@@ -8,7 +8,7 @@ class GCDDataManager: UserManager {
     private let fileManager = UserFileManager()
     private let queue = DispatchQueue.global(qos: .default)
 
-    private(set) var user: User?
+    private(set) lazy var user: User? = fileManager.savedUser()
 
     func save(name: String?, bio: String?, avatar: UIImage?, completion: @escaping (_ success: Bool) -> Void) {
         let mainCompletion = { success in
