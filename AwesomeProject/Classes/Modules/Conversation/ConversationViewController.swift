@@ -10,6 +10,7 @@ class ConversationViewController: ParentVC {
         static let cellReuseId = String(describing: MessageCell.self)
     }
 
+    private let coreDataStack = CoreDataStack.shared
     private var isInitial = true
     private var data: [Message] = []
 
@@ -134,29 +135,46 @@ class ConversationViewController: ParentVC {
                 return
             }
 
-            snapshot.documentChanges.forEach { diff in
-                let document = diff.document
-                let message = Message(dictionary: document.data())
+            self.coreDataStack.performSave { [weak self] context in
+                guard let self = self else {
+                    return
+                }
 
-                let index = self.data.firstIndex(where: { $0 == message })
-                switch diff.type {
-                case .added, .modified:
-                    if let index = index {
-                        self.data.remove(at: index)
-                        if let message = message {
+                let channel = (try? context.fetch(DBChannel.fetchRequest(channelId: self.channel.identifier)))?.first
+
+                var dbMessages: [DBMessage] = []
+
+                snapshot.documentChanges.forEach { diff in
+                    let document = diff.document
+                    if let dbMessage = DBMessage(id: document.documentID, dictionary: document.data(), in: context) {
+                        dbMessages.append(dbMessage)
+                    }
+
+                    let message = Message(id: document.documentID, dictionary: document.data())
+
+                    let index = self.data.firstIndex(where: { $0.identifier == message?.identifier })
+                    switch diff.type {
+                    case .added, .modified:
+                        if let index = index {
+                            self.data.remove(at: index)
+                            if let message = message {
+                                self.data.append(message)
+                            }
+                        } else if let message = message {
                             self.data.append(message)
                         }
-                    } else if let message = message {
-                        self.data.append(message)
-                    }
-                case .removed:
-                    if let index = index {
-                        self.data.remove(at: index)
+                    case .removed:
+                        if let index = index {
+                            self.data.remove(at: index)
+                        }
                     }
                 }
+                channel?.addToMessages(NSSet(array: dbMessages))
+                self.data = self.data.sorted(by: { $0.created < $1.created })
+                DispatchQueue.main.async {
+                    self.reloadData()
+                }
             }
-            self.data = self.data.sorted(by: { $0.created < $1.created })
-            self.reloadData()
         }
     }
 
