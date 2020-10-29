@@ -79,6 +79,19 @@ class CoreDataStack {
         }
     }
 
+    private func logDBStatistics() {
+        mainContext.performAndWait {
+            do {
+                let channels = try mainContext.count(for: DBChannel.fetchCountRequest())
+                let messages = try mainContext.count(for: DBMessage.fetchCountRequest())
+                debugLogger.log("Channels total: \(channels)")
+                debugLogger.log("Messages total: \(messages)")
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }
+
     @objc
     private func didChangeContext(notification: NSNotification) {
         guard let userInfo = notification.userInfo else {
@@ -111,11 +124,11 @@ class CoreDataStack {
 
     func performSave(_ block: @escaping (NSManagedObjectContext) -> Void) {
         let context = saveContext()
-        context.perform { [weak self] in
+        context.performAndWait {
             block(context)
             if context.hasChanges {
                 do {
-                    try self?.performSave(in: context)
+                    try performSave(in: context)
                 } catch {
                     assertionFailure(error.localizedDescription)
                 }
@@ -131,18 +144,5 @@ class CoreDataStack {
             name: NSNotification.Name.NSManagedObjectContextObjectsDidChange,
             object: mainContext
         )
-    }
-
-    func logDBStatistics() {
-        mainContext.performAndWait { [weak self] in
-            do {
-                let channels = try self?.mainContext.count(for: DBChannel.fetchCountRequest())
-                let messages = try self?.mainContext.count(for: DBMessage.fetchCountRequest())
-                debugLogger.log("Channels total: \(channels ?? -1)")
-                debugLogger.log("Messages total: \(messages ?? -1)")
-            } catch {
-                fatalError(error.localizedDescription)
-            }
-        }
     }
 }
