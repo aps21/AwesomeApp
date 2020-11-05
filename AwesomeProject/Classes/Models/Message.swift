@@ -43,6 +43,24 @@ class DBMessage: NSManagedObject, InfoObject {
         ]
     }
 
+    @nonobjc public class func fetchRequest(channelId: String) -> NSFetchRequest<DBMessage> {
+        let request = NSFetchRequest<DBMessage>(entityName: "DBMessage")
+        request.predicate = NSPredicate(format: "channel.identifier == %@", channelId)
+        request.fetchBatchSize = 20
+        request.sortDescriptors = [
+            NSSortDescriptor(key: "created", ascending: true),
+            NSSortDescriptor(key: "identifier", ascending: true)
+        ]
+        return request
+    }
+
+    @nonobjc public class func fetchRequest(messageId: String) -> NSFetchRequest<DBMessage> {
+        let request = NSFetchRequest<DBMessage>(entityName: "DBMessage")
+        request.predicate = NSPredicate(format: "identifier == %@", messageId)
+        request.fetchLimit = 1
+        return request
+    }
+
     @nonobjc public class func fetchCountRequest() -> NSFetchRequest<DBMessage> {
         let request = NSFetchRequest<DBMessage>(entityName: "DBMessage")
         request.resultType = .countResultType
@@ -70,6 +88,14 @@ struct Message {
         created = tempCreated.dateValue()
         senderId = tempSenderId
         senderName = tempSenderName
+    }
+
+    init(dbMessage: DBMessage) {
+        identifier = dbMessage.identifier
+        content = dbMessage.content
+        created = dbMessage.created
+        senderId = dbMessage.senderId
+        senderName = dbMessage.senderName
     }
 
     static func payload(message: String, user: User) -> [String: Any] {

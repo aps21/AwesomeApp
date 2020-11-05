@@ -2,6 +2,7 @@
 // AwesomeProject
 //
 
+import CoreData
 import Firebase
 import UIKit
 
@@ -12,13 +13,32 @@ class ConversationViewController: ParentVC {
 
     private let coreDataStack = CoreDataStack.shared
     private var isInitial = true
-    private var data: [Message] = []
 
     private lazy var keyboardManager: KeyboardManagerProtocol = KeyboardManager(notificationCenter: notificationCenter)
     private lazy var database = Firestore.firestore()
     private lazy var messagesReference = database.collection("channels/\(channel.identifier)/messages")
 
-    private lazy var bottomInset = bottomView.frame.height
+    private lazy var fetchResultController: NSFetchedResultsController<DBMessage> = {
+        let request: NSFetchRequest<DBMessage> = DBMessage.fetchRequest(channelId: channel.identifier)
+        let controller = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: coreDataStack.mainContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        controller.delegate = self
+        do {
+            try controller.performFetch()
+        } catch {
+            self.show(error: error.localizedDescription)
+        }
+        return controller
+    }()
+
+    private lazy var bottomInset: CGFloat = {
+        bottomView.layoutIfNeeded()
+        return bottomView.frame.height
+    }()
 
     var channel: Channel!
     var user: User?
@@ -71,6 +91,7 @@ class ConversationViewController: ParentVC {
             }
         }
 
+        reloadData(isPrereload: true)
         loadData()
     }
 
@@ -105,27 +126,28 @@ class ConversationViewController: ParentVC {
         }
     }
 
-    private func reloadData() {
+    private func reloadData(isPrereload: Bool = false) {
+        // TODO: Refactor scroll to bottom
         let epsilon: CGFloat = 10
         if !isInitial,
             tableView.contentSize.height - tableView.contentOffset.y + tableView.contentInset.bottom <= view.frame.height + epsilon {
             isInitial = true
         }
 
-        tableView.reloadData()
-        tableView.layoutIfNeeded()
-
         if isInitial {
-            isInitial = false
+            tableView.isHidden = false
+            if !isPrereload {
+                isInitial = false
+            }
             let yOffset = tableView.contentSize.height - view.frame.height + bottomInset
             tableView.contentInset.top = max(view.safeAreaInsets.top, -yOffset)
             if tableView.contentInset.bottom < bottomInset {
                 tableView.contentInset.bottom = bottomInset
+                tableView.scrollIndicatorInsets.bottom = bottomInset
             }
             tableView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: false)
-            tableView.isHidden = false
             loaderView.stopAnimating()
-            emptyView.isHidden = !data.isEmpty
+            emptyView.isHidden = !((fetchResultController.fetchedObjects ?? []).isEmpty && !isPrereload)
         }
     }
 
@@ -140,39 +162,26 @@ class ConversationViewController: ParentVC {
                     return
                 }
 
-                let channel = (try? context.fetch(DBChannel.fetchRequest(channelId: self.channel.identifier)))?.first
-
                 var dbMessages: [DBMessage] = []
 
                 snapshot.documentChanges.forEach { diff in
                     let document = diff.document
-                    if let dbMessage = DBMessage(id: document.documentID, dictionary: document.data(), in: context) {
-                        dbMessages.append(dbMessage)
-                    }
+                    let id = document.documentID
 
-                    let message = Message(id: document.documentID, dictionary: document.data())
-
-                    let index = self.data.firstIndex(where: { $0.identifier == message?.identifier })
                     switch diff.type {
                     case .added, .modified:
-                        if let index = index {
-                            self.data.remove(at: index)
-                            if let message = message {
-                                self.data.append(message)
-                            }
-                        } else if let message = message {
-                            self.data.append(message)
+                        if let dbMessage = DBMessage(id: id, dictionary: document.data(), in: context) {
+                            dbMessages.append(dbMessage)
                         }
                     case .removed:
-                        if let index = index {
-                            self.data.remove(at: index)
+                        if let message = (try? context.fetch(DBMessage.fetchRequest(messageId: id)))?.first {
+                            context.delete(message)
                         }
                     }
                 }
-                channel?.addToMessages(NSSet(array: dbMessages))
-                self.data = self.data.sorted(by: { $0.created < $1.created })
-                DispatchQueue.main.async {
-                    self.reloadData()
+                if !dbMessages.isEmpty {
+                    let channel = (try? context.fetch(DBChannel.fetchRequest(channelId: self.channel.identifier)))?.first
+                    channel?.addToMessages(NSSet(array: dbMessages))
                 }
             }
         }
@@ -187,7 +196,7 @@ class ConversationViewController: ParentVC {
 
 extension ConversationViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        data.count
+        fetchResultController.fetchedObjects?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -195,13 +204,13 @@ extension ConversationViewController: UITableViewDataSource {
             return UITableViewCell()
         }
 
-        configure(cell: cell, row: indexPath.row)
+        configure(cell: cell, indexPath: indexPath)
         return cell
     }
 
-    private func configure(cell: MessageCell, row: Int) {
-        let message = data[row]
-        cell.configure(with: MessageCellModel(message: message, isMine: message.senderId == user?.senderId))
+    private func configure(cell: MessageCell, indexPath: IndexPath) {
+        let message = fetchResultController.object(at: indexPath)
+        cell.configure(with: MessageCellModel(message: Message(dbMessage: message), isMine: message.senderId == user?.senderId))
     }
 }
 
@@ -211,7 +220,7 @@ extension ConversationViewController: UITableViewDelegate {
             return tableView.estimatedRowHeight
         }
 
-        configure(cell: prototypeCell, row: indexPath.row)
+        configure(cell: prototypeCell, indexPath: indexPath)
         return prototypeCell.contentView.systemLayoutSizeFitting(
             CGSize(width: view.frame.width, height: UIView.noIntrinsicMetric),
             withHorizontalFittingPriority: .required,
@@ -227,5 +236,55 @@ extension ConversationViewController: UITableViewDelegate {
 extension ConversationViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         sendButton.isEnabled = !textView.text.isEmpty
+    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension ConversationViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+
+    func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
+        guard anObject is DBMessage else {
+            return
+        }
+
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else {
+                return
+            }
+            tableView.insertRows(at: [newIndexPath], with: .none)
+        case .delete:
+            guard let indexPath = indexPath else {
+                return
+            }
+            tableView.deleteRows(at: [indexPath], with: .none)
+        case .update:
+            guard let indexPath = indexPath else {
+                return
+            }
+            tableView.reloadRows(at: [indexPath], with: .fade)
+        case .move:
+            guard let indexPath = indexPath, let newIndexPath = newIndexPath else {
+                return
+            }
+            tableView.moveRow(at: indexPath, to: newIndexPath)
+        default:
+            return
+        }
+    }
+
+    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+        reloadData()
     }
 }
