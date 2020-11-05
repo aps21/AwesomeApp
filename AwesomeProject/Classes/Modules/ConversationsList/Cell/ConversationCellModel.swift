@@ -10,7 +10,7 @@ struct ConversationCellModel {
     let date: Date?
     let color: UIColor
 
-    init(channel: Channel) {
+    init(channel: DBChannel) {
         name = channel.name
         message = channel.lastMessage ?? ""
         date = channel.lastActivity

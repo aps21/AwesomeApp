@@ -2,6 +2,7 @@
 // AwesomeProject
 //
 
+import CoreData
 import Firebase
 import UIKit
 
@@ -17,13 +18,28 @@ class ConversationsListViewController: ParentVC {
     private let userManager = GCDDataManager()
 
     private var observationUser: NSObjectProtocol?
-    private var isInitial = true
     private var user: User?
 
     private lazy var database = Firestore.firestore()
     private lazy var channelsReference = database.collection("channels")
 
-    private lazy var data: [Channel] = []
+    private lazy var fetchResultController: NSFetchedResultsController<DBChannel> = {
+        let request: NSFetchRequest<DBChannel> = DBChannel.fetchRequest()
+        let controller = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: coreDataStack.mainContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        controller.delegate = self
+        do {
+            try controller.performFetch()
+        } catch {
+            self.show(error: error.localizedDescription)
+        }
+        return controller
+    }()
+
     private lazy var avatarBarButtonItem: UIBarButtonItem = {
         UIBarButtonItem(customView: avatarButton)
     }()
@@ -58,6 +74,7 @@ class ConversationsListViewController: ParentVC {
 
         tableView.register(UINib(nibName: Constants.cellReuseId, bundle: nil), forCellReuseIdentifier: Constants.cellReuseId)
 
+        tableView.reloadData()
         loadData()
     }
 
@@ -117,42 +134,14 @@ class ConversationsListViewController: ParentVC {
                     let document = diff.document
                     let id = document.documentID
 
-                    let index = self.data.firstIndex(where: { $0.identifier == id })
                     switch diff.type {
                     case .added, .modified:
                         _ = DBChannel(id: id, dictionary: document.data(), in: context)
-                        let channel = Channel(id: id, dictionary: document.data())
-                        if let index = index {
-                            self.data.remove(at: index)
-                            if let channel = channel {
-                                self.data.insert(channel, at: 0)
-                            }
-                        } else if let channel = channel {
-                            self.data.insert(channel, at: 0)
-                        }
                     case .removed:
-                        if let index = index {
-                            self.data.remove(at: index)
+                        if let channel = (try? context.fetch(DBChannel.fetchRequest(channelId: id)))?.first {
+                            context.delete(channel)
                         }
                     }
-                }
-
-                if self.isInitial {
-                    self.isInitial = false
-                    self.data = self.data.sorted(by: { channel1, channel2 in
-                        switch (channel1.lastActivity, channel2.lastActivity) {
-                        case let (.some(activity1), .some(activity2)):
-                            return activity1 >= activity2
-                        case (.none, _):
-                            return false
-                        case (_, .none):
-                            return true
-                        }
-                    })
-                }
-
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
                 }
             }
         }
@@ -176,7 +165,7 @@ class ConversationsListViewController: ParentVC {
 
 extension ConversationsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        data.count
+        fetchResultController.fetchedObjects?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -184,14 +173,9 @@ extension ConversationsListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
 
-        if data.count > indexPath.row {
-            let model = ConversationCellModel(channel: data[indexPath.row])
-            cell.configure(with: model)
-            if data.count - 1 == indexPath.row {
-                cell.hideDivider()
-            }
-        }
-
+        let channel = fetchResultController.object(at: indexPath)
+        let model = ConversationCellModel(channel: channel)
+        cell.configure(with: model)
         return cell
     }
 }
@@ -200,6 +184,87 @@ extension ConversationsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        performSegue(withIdentifier: Constants.conversationSegue, sender: data[indexPath.row])
+        let dbChannel = fetchResultController.object(at: indexPath)
+        let channel = Channel(dbChannel: dbChannel)
+        performSegue(withIdentifier: Constants.conversationSegue, sender: channel)
+    }
+
+    func tableView(
+        _: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let delete = deleteContextualAction(for: indexPath)
+        return UISwipeActionsConfiguration(actions: [delete])
+    }
+
+    private func deleteContextualAction(for indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal, title: nil) { [weak self] _, _, completion in
+            guard let self = self else {
+                completion(false)
+                return
+            }
+            let channelId = self.fetchResultController.object(at: indexPath).identifier
+            self.channelsReference.document(channelId).delete { [weak self] error in
+                if let error = error {
+                    self?.show(error: error.localizedDescription)
+                    completion(false)
+                } else {
+                    completion(true)
+                }
+            }
+            completion(true)
+        }
+        action.image = UIImage(named: "Conversations/delete")
+        action.backgroundColor = Color.lightYellowColor
+        return action
+    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+
+    func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
+        guard anObject is DBChannel else {
+            return
+        }
+
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else {
+                return
+            }
+            tableView.insertRows(at: [newIndexPath], with: .fade)
+        case .delete:
+            guard let indexPath = indexPath else {
+                return
+            }
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        case .update:
+            guard let indexPath = indexPath else {
+                return
+            }
+            tableView.reloadRows(at: [indexPath], with: .fade)
+        case .move:
+            guard let indexPath = indexPath, let newIndexPath = newIndexPath else {
+                return
+            }
+            tableView.moveRow(at: indexPath, to: newIndexPath)
+        default:
+            return
+        }
+    }
+
+    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
     }
 }
