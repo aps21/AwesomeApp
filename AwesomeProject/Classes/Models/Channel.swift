@@ -18,7 +18,7 @@ private enum ColorHelper {
 }
 
 @objc(DBChannel)
-class DBChannel: NSManagedObject, InfoObject {
+final class DBChannel: NSManagedObject, FetchedDBObject {
     @NSManaged var identifier: String
     @NSManaged var name: String
     @NSManaged var lastMessage: String?
@@ -44,7 +44,7 @@ class DBChannel: NSManagedObject, InfoObject {
         lastActivity = (dictionary["lastActivity"] as? Timestamp)?.dateValue()
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<DBChannel> {
+    @nonobjc public class func fetchRequest(parentId _: String?) -> NSFetchRequest<DBChannel> {
         let request = NSFetchRequest<DBChannel>(entityName: "DBChannel")
         request.fetchBatchSize = 20
         request.sortDescriptors = [

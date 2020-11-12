@@ -14,31 +14,14 @@ class ConversationsListViewController: ParentVC {
         static let avatarHeight: CGFloat = 40
     }
 
-    private let coreDataStack = CoreDataStack.shared
-    private let userManager = GCDDataManager()
+    private let userManager: UserManager = GCDDataManager()
 
     private var observationUser: NSObjectProtocol?
     private var user: User?
 
-    private lazy var database = Firestore.firestore()
-    private lazy var channelsReference = database.collection("channels")
-
-    private lazy var fetchResultController: NSFetchedResultsController<DBChannel> = {
-        let request: NSFetchRequest<DBChannel> = DBChannel.fetchRequest()
-        let controller = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: coreDataStack.mainContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        controller.delegate = self
-        do {
-            try controller.performFetch()
-        } catch {
-            self.show(error: error.localizedDescription)
-        }
-        return controller
-    }()
+    private lazy var service: ChannelsServiceProtocol = ChannelsService(path: "channels")
+    private lazy var dataSource: ChannelDataSource =
+        ConversationsFetchedResultsObject(parentId: nil, tableView: tableView, delegate: self)
 
     private lazy var avatarBarButtonItem: UIBarButtonItem = {
         UIBarButtonItem(customView: avatarButton)
@@ -115,34 +98,13 @@ class ConversationsListViewController: ParentVC {
     }
 
     private func create(name: String) {
-        channelsReference.addDocument(data: ["name": name])
+        service.create(name: name)
     }
 
     private func loadData() {
-        channelsReference.addSnapshotListener { [weak self] snapshot, error in
-            guard let self = self else {
-                return
-            }
-
-            guard let snapshot = snapshot else {
-                self.show(error: error?.localizedDescription)
-                return
-            }
-
-            self.coreDataStack.performSave { context in
-                snapshot.documentChanges.forEach { diff in
-                    let document = diff.document
-                    let id = document.documentID
-
-                    switch diff.type {
-                    case .added, .modified:
-                        _ = DBChannel(id: id, dictionary: document.data(), in: context)
-                    case .removed:
-                        if let channel = (try? context.fetch(DBChannel.fetchRequest(channelId: id)))?.first {
-                            context.delete(channel)
-                        }
-                    }
-                }
+        service.loadData { [weak self] error in
+            if let error = error {
+                self?.show(error: error.localizedDescription)
             }
         }
     }
@@ -153,19 +115,13 @@ class ConversationsListViewController: ParentVC {
         avatarButton.setImage(image, for: .normal)
         navigationItem.rightBarButtonItem = avatarBarButtonItem
     }
-
-    private func show(error: String?) {
-        let alertVC = UIAlertController(title: L10n.Alert.errorTitle, message: error ?? L10n.Alert.errorUnknown, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: L10n.Alert.errorOk, style: .default, handler: nil))
-        present(alertVC, animated: true)
-    }
 }
 
 // MARK: - UITableView
 
 extension ConversationsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        fetchResultController.fetchedObjects?.count ?? 0
+        dataSource.total
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -173,7 +129,7 @@ extension ConversationsListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
 
-        let channel = fetchResultController.object(at: indexPath)
+        let channel = dataSource.object(at: indexPath)
         let model = ConversationCellModel(channel: channel)
         cell.configure(with: model)
         return cell
@@ -184,7 +140,7 @@ extension ConversationsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        let dbChannel = fetchResultController.object(at: indexPath)
+        let dbChannel = dataSource.object(at: indexPath)
         let channel = Channel(dbChannel: dbChannel)
         performSegue(withIdentifier: Constants.conversationSegue, sender: channel)
     }
@@ -203,8 +159,8 @@ extension ConversationsListViewController: UITableViewDelegate {
                 completion(false)
                 return
             }
-            let channelId = self.fetchResultController.object(at: indexPath).identifier
-            self.channelsReference.document(channelId).delete { [weak self] error in
+            let channelId = self.dataSource.object(at: indexPath).identifier
+            self.service.delete(id: channelId) { [weak self] error in
                 if let error = error {
                     self?.show(error: error.localizedDescription)
                     completion(false)
@@ -220,51 +176,8 @@ extension ConversationsListViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - NSFetchedResultsControllerDelegate
+// MARK: - FinishProtocol
 
-extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-
-    func controller(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
-        didChange anObject: Any,
-        at indexPath: IndexPath?,
-        for type: NSFetchedResultsChangeType,
-        newIndexPath: IndexPath?
-    ) {
-        guard anObject is DBChannel else {
-            return
-        }
-
-        switch type {
-        case .insert:
-            guard let newIndexPath = newIndexPath else {
-                return
-            }
-            tableView.insertRows(at: [newIndexPath], with: .fade)
-        case .delete:
-            guard let indexPath = indexPath else {
-                return
-            }
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        case .update:
-            guard let indexPath = indexPath else {
-                return
-            }
-            tableView.reloadRows(at: [indexPath], with: .fade)
-        case .move:
-            guard let indexPath = indexPath, let newIndexPath = newIndexPath else {
-                return
-            }
-            tableView.moveRow(at: indexPath, to: newIndexPath)
-        default:
-            return
-        }
-    }
-
-    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    }
+extension ConversationsListViewController: FinishProtocol {
+    func didFinish() {}
 }

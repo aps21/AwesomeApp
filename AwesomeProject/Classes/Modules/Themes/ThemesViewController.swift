@@ -14,12 +14,7 @@ class ThemesViewController: ParentVC {
 
     private lazy var initialTheme = themeManager.theme
 
-//    Если у ConversationsListViewController/ThemeManager будет сильная ссылка на ThemesViewController,
-//    а у ThemesViewController - на ConversationsListViewController/ThemeManager
-//    Чтобы заметить утечку, нужно чтобы ConversationsListViewController тоже создавался несколько раз, а не был главным экраном
-
     weak var delegate: ThemesPickerDelegate?
-    var applyClosure: ((_ theme: Theme) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +33,6 @@ class ThemesViewController: ParentVC {
         themeViews.forEach { stackView.addArrangedSubview($0) }
 
         delegate = themeManager
-        applyClosure = { [weak self] in self?.themeManager.didSelect(theme: $0) }
     }
 }
 
@@ -48,9 +42,7 @@ extension ThemesViewController: ThemesPickerDelegate {
             themeViews.first(where: { $0.model == themeManager.theme })?.setSelected(false)
             view.backgroundColor = theme.settingsBGColor
 
-            // Choose your fighter! 😈
             delegate?.didSelect(theme: theme)
-//            applyClosure?(theme)
         }
     }
 }

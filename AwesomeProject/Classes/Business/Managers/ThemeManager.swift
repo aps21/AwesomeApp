@@ -4,7 +4,12 @@
 
 import UIKit
 
-class ThemeManager: ThemesPickerDelegate {
+protocol ThemeManagerProtocol: ThemesPickerDelegate {
+    var theme: Theme { get }
+    func didSelect(theme: Theme)
+}
+
+class ThemeManager: ThemeManagerProtocol {
     private enum Constants {
         static let themeKey = "ThemeManager.themeKey"
     }

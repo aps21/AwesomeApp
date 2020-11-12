@@ -5,7 +5,7 @@
 import UIKit
 
 private class UserDataOperation: Operation {
-    var fileManager: UserFileManager?
+    var fileManager: UserStore?
     var userName: String?
     var userBio: String?
     var userAvatar: UIImage?
@@ -25,7 +25,7 @@ private class UserDataOperation: Operation {
 
 class OperationDataManager: Operation, UserManager {
     private let operationQueue = OperationQueue()
-    private let fileManager = UserFileManager()
+    private let fileManager: UserStore = UserFileManager()
 
     func save(name: String?, bio: String?, avatar: UIImage?, completion: @escaping (_ success: Bool) -> Void) {
         let operation = UserDataOperation()

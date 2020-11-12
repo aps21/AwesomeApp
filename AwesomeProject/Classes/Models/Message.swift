@@ -7,7 +7,7 @@ import Firebase
 import Foundation
 
 @objc(DBMessage)
-class DBMessage: NSManagedObject, InfoObject {
+final class DBMessage: NSManagedObject, FetchedDBObject {
     @NSManaged var identifier: String
     @NSManaged var content: String
     @NSManaged var created: Date
@@ -43,9 +43,9 @@ class DBMessage: NSManagedObject, InfoObject {
         ]
     }
 
-    @nonobjc public class func fetchRequest(channelId: String) -> NSFetchRequest<DBMessage> {
+    @nonobjc public class func fetchRequest(parentId channelId: String?) -> NSFetchRequest<DBMessage> {
         let request = NSFetchRequest<DBMessage>(entityName: "DBMessage")
-        request.predicate = NSPredicate(format: "channel.identifier == %@", channelId)
+        request.predicate = NSPredicate(format: "channel.identifier == %@", channelId ?? "")
         request.fetchBatchSize = 20
         request.sortDescriptors = [
             NSSortDescriptor(key: "created", ascending: true),

@@ -4,11 +4,15 @@
 
 import UIKit
 
-class ParentVC: UIViewController {
+protocol ErrorDelegate: AnyObject {
+    func show(error: String?)
+}
+
+class ParentVC: UIViewController, ErrorDelegate {
     private var observationTheme: NSObjectProtocol?
     private let debugLogger = Logger()
 
-    let themeManager: ThemeManager = .shared
+    let themeManager: ThemeManagerProtocol = ThemeManager.shared
     let notificationCenter: NotificationCenter = .default
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -56,5 +60,11 @@ class ParentVC: UIViewController {
 
     func log(message: String) {
         debugLogger.log(message)
+    }
+
+    func show(error: String?) {
+        let alertVC = UIAlertController(title: L10n.Alert.errorTitle, message: error ?? L10n.Alert.errorUnknown, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: L10n.Alert.errorOk, style: .default, handler: nil))
+        present(alertVC, animated: true)
     }
 }
