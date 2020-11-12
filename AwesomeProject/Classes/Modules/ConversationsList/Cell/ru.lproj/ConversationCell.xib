@@ -24,7 +24,7 @@
                                 <rect key="frame" x="16" y="21" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ae2-HI-f1X" secondAttribute="height" multiplier="1:1" id="e2r-61-Xgi"/>
-                                    <constraint firstAttribute="height" constant="48" id="ift-fQ-paU"/>
+                                    <constraint firstAttribute="height" priority="999" constant="48" id="ift-fQ-paU"/>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="AH0-lb-NEF">

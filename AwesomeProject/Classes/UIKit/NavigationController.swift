@@ -5,7 +5,7 @@
 import UIKit
 
 class NavigationController: UINavigationController, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
-    private let themeManager: ThemeManager = .shared
+    private let themeManager: ThemeManagerProtocol = ThemeManager.shared
     private let notificationCenter: NotificationCenter = .default
     private var observationTheme: NSObjectProtocol?
 

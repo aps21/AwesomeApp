@@ -4,8 +4,12 @@
 
 import UIKit
 
-// TODO: Maybe need to make more universal
-class UserFileManager {
+protocol UserStore {
+    func save(name: String?, bio: String?, avatar: UIImage?, completion: @escaping (_ success: Bool) -> Void)
+    func savedUser() -> User?
+}
+
+class UserFileManager: UserStore {
     private let file = "user.txt"
     private let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     private let decoder = JSONDecoder()

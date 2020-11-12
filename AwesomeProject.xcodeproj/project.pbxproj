@@ -45,6 +45,17 @@
 		B5D1712E2538B5A800D9C622 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5D1712D2538B5A800D9C622 /* GoogleService-Info.plist */; };
 		B5DD27C4250E8BC300B6CFAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5DD27C3250E8BC300B6CFAC /* LaunchScreen.storyboard */; };
 		B5DD27C5250E8CA500B6CFAC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5DD27C7250E8CA500B6CFAC /* Profile.storyboard */; };
+		B5DD8B75255DBB24001E7FDC /* FetchedResultsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B74255DBB24001E7FDC /* FetchedResultsObject.swift */; };
+		B5DD8B77255DBDDF001E7FDC /* FetchedResultsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B76255DBDDE001E7FDC /* FetchedResultsDelegate.swift */; };
+		B5DD8B79255DCD21001E7FDC /* MessagesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B78255DCD21001E7FDC /* MessagesService.swift */; };
+		B5DD8B7B255DD063001E7FDC /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B7A255DD063001E7FDC /* FirebaseStorage.swift */; };
+		B5DD8B7D255DD412001E7FDC /* MessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B7C255DD412001E7FDC /* MessageDataSource.swift */; };
+		B5DD8B7F255DD453001E7FDC /* ChannelDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B7E255DD453001E7FDC /* ChannelDataSource.swift */; };
+		B5DD8B81255DD4A2001E7FDC /* ChannelsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B80255DD4A2001E7FDC /* ChannelsService.swift */; };
+		B5DD8B84255DDE24001E7FDC /* CoreDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B83255DDE24001E7FDC /* CoreDataStorage.swift */; };
+		B5DD8B86255DE000001E7FDC /* MessageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B85255DE000001E7FDC /* MessageStorage.swift */; };
+		B5DD8B88255DE01A001E7FDC /* DataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B87255DE01A001E7FDC /* DataItem.swift */; };
+		B5DD8B8A255DE0D3001E7FDC /* ChannelStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD8B89255DE0D3001E7FDC /* ChannelStorage.swift */; };
 		B5E956D02521123A00D61585 /* ConversationsList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5E956D22521123A00D61585 /* ConversationsList.storyboard */; };
 		B5E956D6252112B200D61585 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E956D4252112B200D61585 /* ConversationCell.swift */; };
 		B5E956D8252118DA00D61585 /* ConversationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5E956DA252118DA00D61585 /* ConversationCell.xib */; };
@@ -104,6 +115,17 @@
 		B5CEFD91251A9A1D001EAB70 /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
 		B5D1712D2538B5A800D9C622 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B5DD27C3250E8BC300B6CFAC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B5DD8B74255DBB24001E7FDC /* FetchedResultsObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsObject.swift; sourceTree = "<group>"; };
+		B5DD8B76255DBDDE001E7FDC /* FetchedResultsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsDelegate.swift; sourceTree = "<group>"; };
+		B5DD8B78255DCD21001E7FDC /* MessagesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesService.swift; sourceTree = "<group>"; };
+		B5DD8B7A255DD063001E7FDC /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
+		B5DD8B7C255DD412001E7FDC /* MessageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDataSource.swift; sourceTree = "<group>"; };
+		B5DD8B7E255DD453001E7FDC /* ChannelDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDataSource.swift; sourceTree = "<group>"; };
+		B5DD8B80255DD4A2001E7FDC /* ChannelsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsService.swift; sourceTree = "<group>"; };
+		B5DD8B83255DDE24001E7FDC /* CoreDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStorage.swift; sourceTree = "<group>"; };
+		B5DD8B85255DE000001E7FDC /* MessageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStorage.swift; sourceTree = "<group>"; };
+		B5DD8B87255DE01A001E7FDC /* DataItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataItem.swift; sourceTree = "<group>"; };
+		B5DD8B89255DE0D3001E7FDC /* ChannelStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelStorage.swift; sourceTree = "<group>"; };
 		B5E956D12521123A00D61585 /* ru */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = ru; path = ru.lproj/ConversationsList.storyboard; sourceTree = "<group>"; };
 		B5E956D4252112B200D61585 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
 		B5E956D9252118DA00D61585 /* ru */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ru; path = ru.lproj/ConversationCell.xib; sourceTree = "<group>"; };
@@ -179,6 +201,7 @@
 				B5566920252B8DF700412D5A /* Theme.swift */,
 				B58114C5251BDD6600799120 /* User.swift */,
 				B54F5019254B3B1D00869A2B /* InfoObject.swift */,
+				B5DD8B87255DE01A001E7FDC /* DataItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -208,8 +231,11 @@
 				B5C1127C25377536009304E8 /* KeyboardManager.swift */,
 				B5ACC9BD25377D7D00288666 /* GCDDataManager.swift */,
 				B5ACC9BF25377D9200288666 /* OperationDataManager.swift */,
-				B5ACC9C125377E3400288666 /* UserFileManager.swift */,
 				B5ACC9C32537932400288666 /* UserManager.swift */,
+				B5DD8B78255DCD21001E7FDC /* MessagesService.swift */,
+				B5DD8B80255DD4A2001E7FDC /* ChannelsService.swift */,
+				B5DD8B7E255DD453001E7FDC /* ChannelDataSource.swift */,
+				B5DD8B7C255DD412001E7FDC /* MessageDataSource.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -350,6 +376,18 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		B5DD8B82255DDDE7001E7FDC /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				B5ACC9C125377E3400288666 /* UserFileManager.swift */,
+				B5DD8B7A255DD063001E7FDC /* FirebaseStorage.swift */,
+				B5DD8B83255DDE24001E7FDC /* CoreDataStorage.swift */,
+				B5DD8B89255DE0D3001E7FDC /* ChannelStorage.swift */,
+				B5DD8B85255DE000001E7FDC /* MessageStorage.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
 		B5E956D32521127800D61585 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -363,6 +401,7 @@
 		B5E956E325211B7B00D61585 /* Business */ = {
 			isa = PBXGroup;
 			children = (
+				B5DD8B82255DDDE7001E7FDC /* Storage */,
 				B5E956E425211B8800D61585 /* Helpers */,
 				B5951DC2252CEFD60041120E /* Managers */,
 			);
@@ -375,6 +414,8 @@
 				B5E956E125211B7600D61585 /* DateFormatter+.swift */,
 				B58114C7251BDE9800799120 /* String+first.swift */,
 				B5F9633E25211CC800D79900 /* Date+.swift */,
+				B5DD8B74255DBB24001E7FDC /* FetchedResultsObject.swift */,
+				B5DD8B76255DBDDE001E7FDC /* FetchedResultsDelegate.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -543,6 +584,9 @@
 			files = (
 				B5F9634E252134F100D79900 /* AvatarHelper.swift in Sources */,
 				B5ACC9C025377D9200288666 /* OperationDataManager.swift in Sources */,
+				B5DD8B7B255DD063001E7FDC /* FirebaseStorage.swift in Sources */,
+				B5DD8B75255DBB24001E7FDC /* FetchedResultsObject.swift in Sources */,
+				B5DD8B77255DBDDF001E7FDC /* FetchedResultsDelegate.swift in Sources */,
 				B5F9634425211D5000D79900 /* ConversationCellModel.swift in Sources */,
 				B5ACC9C42537932400288666 /* UserManager.swift in Sources */,
 				B5CEFD92251A9A1D001EAB70 /* DefaultButton.swift in Sources */,
@@ -554,26 +598,34 @@
 				B5EC96392524F6F30017B2FF /* MessageCell.swift in Sources */,
 				B5ACC9C225377E3400288666 /* UserFileManager.swift in Sources */,
 				B5EC963E252502560017B2FF /* NavigationController.swift in Sources */,
+				B5DD8B86255DE000001E7FDC /* MessageStorage.swift in Sources */,
 				B556691D252B8DE700412D5A /* ThemeView.swift in Sources */,
 				B5566917252B8C2900412D5A /* ThemesViewController.swift in Sources */,
 				B58B01B9251BD41B00006CA6 /* L10n.swift in Sources */,
 				B5CEEE3E25251E3000E7BEA9 /* ConversationTitle.swift in Sources */,
+				B5DD8B81255DD4A2001E7FDC /* ChannelsService.swift in Sources */,
 				B56E3A07253F750D003565B4 /* Channel.swift in Sources */,
 				B5BB378025210FC0006B3AF8 /* ConversationsListViewController.swift in Sources */,
 				B5566921252B8DF700412D5A /* Theme.swift in Sources */,
+				B5DD8B7D255DD412001E7FDC /* MessageDataSource.swift in Sources */,
 				B5521EA9252D101E00B02BAA /* ConversationEmptyVC.swift in Sources */,
 				B5C482832548AE5D00A35791 /* CoreDataStack.swift in Sources */,
 				B5CEFD8E251A98D0001EAB70 /* ProfileVC.swift in Sources */,
+				B5DD8B79255DCD21001E7FDC /* MessagesService.swift in Sources */,
+				B5DD8B88255DE01A001E7FDC /* DataItem.swift in Sources */,
 				B58B01BB251BD56800006CA6 /* Logger.swift in Sources */,
 				B5E956D6252112B200D61585 /* ConversationCell.swift in Sources */,
 				B5C1127D25377536009304E8 /* KeyboardManager.swift in Sources */,
 				B5F9634C252133BE00D79900 /* NeverClearView.swift in Sources */,
 				B5EC963C2524F6FB0017B2FF /* MessageCellModel.swift in Sources */,
 				B5E956E225211B7600D61585 /* DateFormatter+.swift in Sources */,
+				B5DD8B7F255DD453001E7FDC /* ChannelDataSource.swift in Sources */,
 				B5C0FE4A250E68EE005961DB /* AppDelegate.swift in Sources */,
 				B5ACC9BC2537761000288666 /* UIViewController+Keyboard.swift in Sources */,
+				B5DD8B8A255DE0D3001E7FDC /* ChannelStorage.swift in Sources */,
 				B5F9633F25211CC800D79900 /* Date+.swift in Sources */,
 				B5566923252B929C00412D5A /* UIView+Nib.swift in Sources */,
+				B5DD8B84255DDE24001E7FDC /* CoreDataStorage.swift in Sources */,
 				B5521EA7252D00A000B02BAA /* Color.swift in Sources */,
 				B5F963502521401E00D79900 /* SimpleImageButton.swift in Sources */,
 				B5951DC4252CEFE10041120E /* ThemeManager.swift in Sources */,

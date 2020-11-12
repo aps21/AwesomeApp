@@ -5,7 +5,7 @@
 import UIKit
 
 class GCDDataManager: UserManager {
-    private let fileManager = UserFileManager()
+    private let fileManager: UserStore = UserFileManager()
     private let queue = DispatchQueue.global(qos: .default)
 
     private(set) lazy var user: User? = fileManager.savedUser()

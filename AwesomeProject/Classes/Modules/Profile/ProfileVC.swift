@@ -6,8 +6,8 @@ import Photos
 import UIKit
 
 class ProfileVC: ParentVC {
-    let gcdManager = GCDDataManager()
-    let operationManager = OperationDataManager()
+    let gcdManager: UserManager = GCDDataManager()
+    let operationManager: UserManager = OperationDataManager()
     lazy var keyboardManager: KeyboardManagerProtocol = KeyboardManager(notificationCenter: notificationCenter)
 
     private var currentAvatar: UIImage?
@@ -46,7 +46,6 @@ class ProfileVC: ParentVC {
     @IBOutlet private var saveGCDButton: DefaultButton!
     @IBOutlet private var saveOperationButton: DefaultButton!
     @IBOutlet private var editButton: UIBarButtonItem!
-    // TODO: Remove later
     @IBOutlet private var loader: UIActivityIndicatorView!
 
     @IBOutlet private var nameTextField: UITextField!
@@ -130,9 +129,8 @@ class ProfileVC: ParentVC {
         saveOperationButton.isEnabled = false
 
         button.showLoading()
-        loader.startAnimating()
 
-        let manager: UserManager = button == saveGCDButton ? gcdManager : operationManager
+        let manager = button == saveGCDButton ? gcdManager : operationManager
         manager.save(name: nameTextField.text, bio: descriptionTextView.text, avatar: currentAvatar) { [weak self] success in
             if success {
                 self?.view.endEditing(true)

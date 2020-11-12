@@ -11,29 +11,12 @@ class ConversationViewController: ParentVC {
         static let cellReuseId = String(describing: MessageCell.self)
     }
 
-    private let coreDataStack = CoreDataStack.shared
     private var isInitial = true
 
     private lazy var keyboardManager: KeyboardManagerProtocol = KeyboardManager(notificationCenter: notificationCenter)
-    private lazy var database = Firestore.firestore()
-    private lazy var messagesReference = database.collection("channels/\(channel.identifier)/messages")
-
-    private lazy var fetchResultController: NSFetchedResultsController<DBMessage> = {
-        let request: NSFetchRequest<DBMessage> = DBMessage.fetchRequest(channelId: channel.identifier)
-        let controller = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: coreDataStack.mainContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        controller.delegate = self
-        do {
-            try controller.performFetch()
-        } catch {
-            self.show(error: error.localizedDescription)
-        }
-        return controller
-    }()
+    private lazy var service: MessagesServiceProtocol = MessagesService(path: "channels/\(channel.identifier)/messages")
+    private lazy var dataSource: MessageDataSource =
+        MessagessFetchedResultsObject(parentId: channel.identifier, tableView: tableView, delegate: self)
 
     private lazy var bottomInset: CGFloat = {
         bottomView.layoutIfNeeded()
@@ -114,7 +97,7 @@ class ConversationViewController: ParentVC {
 
         isInitial = true
         sendButton.isEnabled = false
-        messagesReference.addDocument(data: Message.payload(message: textView.text, user: user)) { [weak self] error in
+        service.send(message: textView.text, user: user) { [weak self] error in
             guard let self = self else {
                 return
             }
@@ -147,56 +130,23 @@ class ConversationViewController: ParentVC {
             }
             tableView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: false)
             loaderView.stopAnimating()
-            emptyView.isHidden = !((fetchResultController.fetchedObjects ?? []).isEmpty && !isPrereload)
+            emptyView.isHidden = dataSource.total != 0 || isPrereload
         }
     }
 
     private func loadData() {
-        messagesReference.addSnapshotListener { [weak self] snapshot, _ in
-            guard let self = self, let snapshot = snapshot else {
-                return
+        service.loadData(channelId: channel.identifier) { [weak self] error in
+            if let error = error {
+                self?.show(error: error.localizedDescription)
             }
-
-            self.coreDataStack.performSave { [weak self] context in
-                guard let self = self else {
-                    return
-                }
-
-                var dbMessages: [DBMessage] = []
-
-                snapshot.documentChanges.forEach { diff in
-                    let document = diff.document
-                    let id = document.documentID
-
-                    switch diff.type {
-                    case .added, .modified:
-                        if let dbMessage = DBMessage(id: id, dictionary: document.data(), in: context) {
-                            dbMessages.append(dbMessage)
-                        }
-                    case .removed:
-                        if let message = (try? context.fetch(DBMessage.fetchRequest(messageId: id)))?.first {
-                            context.delete(message)
-                        }
-                    }
-                }
-                if !dbMessages.isEmpty {
-                    let channel = (try? context.fetch(DBChannel.fetchRequest(channelId: self.channel.identifier)))?.first
-                    channel?.addToMessages(NSSet(array: dbMessages))
-                }
-            }
+            self?.reloadData()
         }
-    }
-
-    private func show(error: String?) {
-        let alertVC = UIAlertController(title: L10n.Alert.errorTitle, message: error ?? L10n.Alert.errorUnknown, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: L10n.Alert.errorOk, style: .default, handler: nil))
-        present(alertVC, animated: true)
     }
 }
 
 extension ConversationViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        fetchResultController.fetchedObjects?.count ?? 0
+        dataSource.total
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -209,7 +159,7 @@ extension ConversationViewController: UITableViewDataSource {
     }
 
     private func configure(cell: MessageCell, indexPath: IndexPath) {
-        let message = fetchResultController.object(at: indexPath)
+        let message = dataSource.object(at: indexPath)
         cell.configure(with: MessageCellModel(message: Message(dbMessage: message), isMine: message.senderId == user?.senderId))
     }
 }
@@ -233,58 +183,18 @@ extension ConversationViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - UITextViewDelegate
+
 extension ConversationViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         sendButton.isEnabled = !textView.text.isEmpty
     }
 }
 
-// MARK: - NSFetchedResultsControllerDelegate
+// MARK: - FinishProtocol
 
-extension ConversationViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-
-    func controller(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
-        didChange anObject: Any,
-        at indexPath: IndexPath?,
-        for type: NSFetchedResultsChangeType,
-        newIndexPath: IndexPath?
-    ) {
-        guard anObject is DBMessage else {
-            return
-        }
-
-        switch type {
-        case .insert:
-            guard let newIndexPath = newIndexPath else {
-                return
-            }
-            tableView.insertRows(at: [newIndexPath], with: .none)
-        case .delete:
-            guard let indexPath = indexPath else {
-                return
-            }
-            tableView.deleteRows(at: [indexPath], with: .none)
-        case .update:
-            guard let indexPath = indexPath else {
-                return
-            }
-            tableView.reloadRows(at: [indexPath], with: .fade)
-        case .move:
-            guard let indexPath = indexPath, let newIndexPath = newIndexPath else {
-                return
-            }
-            tableView.moveRow(at: indexPath, to: newIndexPath)
-        default:
-            return
-        }
-    }
-
-    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
+extension ConversationViewController: FinishProtocol {
+    func didFinish() {
         reloadData()
     }
 }
