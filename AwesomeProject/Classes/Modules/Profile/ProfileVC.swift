@@ -108,6 +108,10 @@ class ProfileVC: ParentVC {
             })
         }
 
+        alert.addAction(UIAlertAction(title: "Загрузить", style: .default) { [weak self] _ in
+            self?.performSegue(withIdentifier: "images", sender: nil)
+        })
+
         if currentAvatar != nil {
             alert.addAction(UIAlertAction(title: L10n.Profile.AvatarAlert.delete, style: .destructive) { [weak self] _ in
                 guard let self = self else {
@@ -169,6 +173,14 @@ class ProfileVC: ParentVC {
 
         descriptionTextView.backgroundColor = Color.white
         descriptionTextView.textColor = Color.black
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+
+        if let destination = segue.destination as? ProfileImagesVC {
+            destination.delegate = self
+        }
     }
 
     private func presentImagePicker(type: UIImagePickerController.SourceType) {
@@ -251,10 +263,10 @@ extension ProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDele
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
         picker.dismiss(animated: true) { [weak self] in
-            let image = info[.editedImage] as? UIImage
-            self?.imageView.image = image
-            self?.currentAvatar = image
-            self?.updateSavingButtons(didChangeImage: true)
+            guard let image = info[.editedImage] as? UIImage else {
+                return
+            }
+            self?.didSelect(image: image)
         }
     }
 
@@ -283,5 +295,15 @@ extension ProfileVC: UITextViewDelegate {
             return
         }
         scrollView.scrollRectToVisible(frame, animated: true)
+    }
+}
+
+// MARK: - ProfileImagesDelegate
+
+extension ProfileVC: ProfileImagesDelegate {
+    func didSelect(image: UIImage) {
+        imageView.image = image
+        currentAvatar = image
+        updateSavingButtons(didChangeImage: true)
     }
 }
