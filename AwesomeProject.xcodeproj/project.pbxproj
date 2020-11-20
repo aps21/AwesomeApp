@@ -32,6 +32,21 @@
 		B5ACC9C025377D9200288666 /* OperationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5ACC9BF25377D9200288666 /* OperationDataManager.swift */; };
 		B5ACC9C225377E3400288666 /* UserFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5ACC9C125377E3400288666 /* UserFileManager.swift */; };
 		B5ACC9C42537932400288666 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5ACC9C32537932400288666 /* UserManager.swift */; };
+		B5B208662566ECBC007751FA /* ServicesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B208622566ECBC007751FA /* ServicesAssembly.swift */; };
+		B5B208682566ECBC007751FA /* ImagesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B208652566ECBC007751FA /* ImagesService.swift */; };
+		B5B2087C2566ED13007751FA /* CoreAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B2086B2566ED13007751FA /* CoreAssembly.swift */; };
+		B5B2087D2566ED13007751FA /* ImageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B2086E2566ED13007751FA /* ImageParser.swift */; };
+		B5B2087E2566ED13007751FA /* IParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B2086F2566ED13007751FA /* IParser.swift */; };
+		B5B208802566ED13007751FA /* ImagesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B208722566ED13007751FA /* ImagesRequest.swift */; };
+		B5B208812566ED13007751FA /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B208732566ED13007751FA /* IRequest.swift */; };
+		B5B208832566ED13007751FA /* IRequestSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B208762566ED13007751FA /* IRequestSender.swift */; };
+		B5B208842566ED13007751FA /* RequestSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B208772566ED13007751FA /* RequestSender.swift */; };
+		B5B208852566ED13007751FA /* RequestsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B208782566ED13007751FA /* RequestsFactory.swift */; };
+		B5B208862566ED13007751FA /* IImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B2087A2566ED13007751FA /* IImageStorage.swift */; };
+		B5B208892566F4EE007751FA /* ProfileImagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B208882566F4EE007751FA /* ProfileImagesVC.swift */; };
+		B5B2088B2566F6E9007751FA /* ProfileImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B2088A2566F6E9007751FA /* ProfileImageCell.swift */; };
+		B5B2088E2566F931007751FA /* ProfileImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5B2088D2566F931007751FA /* ProfileImageCell.xib */; };
+		B5B20890256701F2007751FA /* ProfileImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B2088F256701F2007751FA /* ProfileImageModel.swift */; };
 		B5BB378025210FC0006B3AF8 /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BB377F25210FC0006B3AF8 /* ConversationsListViewController.swift */; };
 		B5C0FE4A250E68EE005961DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C0FE49250E68EE005961DB /* AppDelegate.swift */; };
 		B5C0FE4E250E68EE005961DB /* ParentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C0FE4D250E68EE005961DB /* ParentVC.swift */; };
@@ -101,6 +116,21 @@
 		B5ACC9BF25377D9200288666 /* OperationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationDataManager.swift; sourceTree = "<group>"; };
 		B5ACC9C125377E3400288666 /* UserFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFileManager.swift; sourceTree = "<group>"; };
 		B5ACC9C32537932400288666 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		B5B208622566ECBC007751FA /* ServicesAssembly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicesAssembly.swift; sourceTree = "<group>"; };
+		B5B208652566ECBC007751FA /* ImagesService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesService.swift; sourceTree = "<group>"; };
+		B5B2086B2566ED13007751FA /* CoreAssembly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreAssembly.swift; sourceTree = "<group>"; };
+		B5B2086E2566ED13007751FA /* ImageParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageParser.swift; sourceTree = "<group>"; };
+		B5B2086F2566ED13007751FA /* IParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IParser.swift; sourceTree = "<group>"; };
+		B5B208722566ED13007751FA /* ImagesRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesRequest.swift; sourceTree = "<group>"; };
+		B5B208732566ED13007751FA /* IRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IRequest.swift; sourceTree = "<group>"; };
+		B5B208762566ED13007751FA /* IRequestSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IRequestSender.swift; sourceTree = "<group>"; };
+		B5B208772566ED13007751FA /* RequestSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestSender.swift; sourceTree = "<group>"; };
+		B5B208782566ED13007751FA /* RequestsFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsFactory.swift; sourceTree = "<group>"; };
+		B5B2087A2566ED13007751FA /* IImageStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IImageStorage.swift; sourceTree = "<group>"; };
+		B5B208882566F4EE007751FA /* ProfileImagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImagesVC.swift; sourceTree = "<group>"; };
+		B5B2088A2566F6E9007751FA /* ProfileImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageCell.swift; sourceTree = "<group>"; };
+		B5B2088D2566F931007751FA /* ProfileImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileImageCell.xib; sourceTree = "<group>"; };
+		B5B2088F256701F2007751FA /* ProfileImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageModel.swift; sourceTree = "<group>"; };
 		B5BB377F25210FC0006B3AF8 /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		B5C0FE46250E68EE005961DB /* AwesomeProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AwesomeProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C0FE49250E68EE005961DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -240,6 +270,105 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		B5B208602566ECBC007751FA /* ServiceLayer */ = {
+			isa = PBXGroup;
+			children = (
+				B5B208612566ECBC007751FA /* Assembly */,
+				B5B208632566ECBC007751FA /* Services */,
+			);
+			path = ServiceLayer;
+			sourceTree = "<group>";
+		};
+		B5B208612566ECBC007751FA /* Assembly */ = {
+			isa = PBXGroup;
+			children = (
+				B5B208622566ECBC007751FA /* ServicesAssembly.swift */,
+			);
+			path = Assembly;
+			sourceTree = "<group>";
+		};
+		B5B208632566ECBC007751FA /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B5B208652566ECBC007751FA /* ImagesService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B5B208692566ED13007751FA /* CoreLayer */ = {
+			isa = PBXGroup;
+			children = (
+				B5B2086A2566ED13007751FA /* Assembly */,
+				B5B2086C2566ED13007751FA /* Networking */,
+				B5B208792566ED13007751FA /* ImageStorage */,
+			);
+			path = CoreLayer;
+			sourceTree = "<group>";
+		};
+		B5B2086A2566ED13007751FA /* Assembly */ = {
+			isa = PBXGroup;
+			children = (
+				B5B2086B2566ED13007751FA /* CoreAssembly.swift */,
+			);
+			path = Assembly;
+			sourceTree = "<group>";
+		};
+		B5B2086C2566ED13007751FA /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				B5B2086D2566ED13007751FA /* Parsers */,
+				B5B208712566ED13007751FA /* Requests */,
+				B5B208752566ED13007751FA /* RequestManager */,
+				B5B208782566ED13007751FA /* RequestsFactory.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		B5B2086D2566ED13007751FA /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				B5B2086E2566ED13007751FA /* ImageParser.swift */,
+				B5B2086F2566ED13007751FA /* IParser.swift */,
+			);
+			path = Parsers;
+			sourceTree = "<group>";
+		};
+		B5B208712566ED13007751FA /* Requests */ = {
+			isa = PBXGroup;
+			children = (
+				B5B208722566ED13007751FA /* ImagesRequest.swift */,
+				B5B208732566ED13007751FA /* IRequest.swift */,
+			);
+			path = Requests;
+			sourceTree = "<group>";
+		};
+		B5B208752566ED13007751FA /* RequestManager */ = {
+			isa = PBXGroup;
+			children = (
+				B5B208762566ED13007751FA /* IRequestSender.swift */,
+				B5B208772566ED13007751FA /* RequestSender.swift */,
+			);
+			path = RequestManager;
+			sourceTree = "<group>";
+		};
+		B5B208792566ED13007751FA /* ImageStorage */ = {
+			isa = PBXGroup;
+			children = (
+				B5B2087A2566ED13007751FA /* IImageStorage.swift */,
+			);
+			path = ImageStorage;
+			sourceTree = "<group>";
+		};
+		B5B2088C2566F91D007751FA /* ImageCell */ = {
+			isa = PBXGroup;
+			children = (
+				B5B2088A2566F6E9007751FA /* ProfileImageCell.swift */,
+				B5B2088D2566F931007751FA /* ProfileImageCell.xib */,
+				B5B2088F256701F2007751FA /* ProfileImageModel.swift */,
+			);
+			path = ImageCell;
+			sourceTree = "<group>";
+		};
 		B5BB377E25210FB5006B3AF8 /* ConversationsList */ = {
 			isa = PBXGroup;
 			children = (
@@ -371,7 +500,9 @@
 		B5DD27B8250E892500B6CFAC /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				B5B2088C2566F91D007751FA /* ImageCell */,
 				B5CEFD8D251A98D0001EAB70 /* ProfileVC.swift */,
+				B5B208882566F4EE007751FA /* ProfileImagesVC.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -401,6 +532,8 @@
 		B5E956E325211B7B00D61585 /* Business */ = {
 			isa = PBXGroup;
 			children = (
+				B5B208692566ED13007751FA /* CoreLayer */,
+				B5B208602566ECBC007751FA /* ServiceLayer */,
 				B5DD8B82255DDDE7001E7FDC /* Storage */,
 				B5E956E425211B8800D61585 /* Helpers */,
 				B5951DC2252CEFD60041120E /* Managers */,
@@ -510,6 +643,7 @@
 				B5EC963A2524F6F30017B2FF /* MessageCell.xib in Resources */,
 				B58B01B6251BD12900006CA6 /* Localizable.strings in Resources */,
 				B5C0FE53250E68EF005961DB /* Assets.xcassets in Resources */,
+				B5B2088E2566F931007751FA /* ProfileImageCell.xib in Resources */,
 				B5DD27C5250E8CA500B6CFAC /* Profile.storyboard in Resources */,
 				B5566918252B8CFC00412D5A /* Themes.storyboard in Resources */,
 			);
@@ -584,7 +718,10 @@
 			files = (
 				B5F9634E252134F100D79900 /* AvatarHelper.swift in Sources */,
 				B5ACC9C025377D9200288666 /* OperationDataManager.swift in Sources */,
+				B5B208832566ED13007751FA /* IRequestSender.swift in Sources */,
+				B5B208862566ED13007751FA /* IImageStorage.swift in Sources */,
 				B5DD8B7B255DD063001E7FDC /* FirebaseStorage.swift in Sources */,
+				B5B208802566ED13007751FA /* ImagesRequest.swift in Sources */,
 				B5DD8B75255DBB24001E7FDC /* FetchedResultsObject.swift in Sources */,
 				B5DD8B77255DBDDF001E7FDC /* FetchedResultsDelegate.swift in Sources */,
 				B5F9634425211D5000D79900 /* ConversationCellModel.swift in Sources */,
@@ -594,21 +731,28 @@
 				B5C0FE4E250E68EE005961DB /* ParentVC.swift in Sources */,
 				B58B01BE251BD5EB00006CA6 /* OSLog.swift in Sources */,
 				B58114C8251BDE9800799120 /* String+first.swift in Sources */,
+				B5B2087E2566ED13007751FA /* IParser.swift in Sources */,
 				B5ACC9BE25377D7D00288666 /* GCDDataManager.swift in Sources */,
 				B5EC96392524F6F30017B2FF /* MessageCell.swift in Sources */,
 				B5ACC9C225377E3400288666 /* UserFileManager.swift in Sources */,
 				B5EC963E252502560017B2FF /* NavigationController.swift in Sources */,
 				B5DD8B86255DE000001E7FDC /* MessageStorage.swift in Sources */,
 				B556691D252B8DE700412D5A /* ThemeView.swift in Sources */,
+				B5B208812566ED13007751FA /* IRequest.swift in Sources */,
 				B5566917252B8C2900412D5A /* ThemesViewController.swift in Sources */,
 				B58B01B9251BD41B00006CA6 /* L10n.swift in Sources */,
+				B5B2087D2566ED13007751FA /* ImageParser.swift in Sources */,
 				B5CEEE3E25251E3000E7BEA9 /* ConversationTitle.swift in Sources */,
 				B5DD8B81255DD4A2001E7FDC /* ChannelsService.swift in Sources */,
 				B56E3A07253F750D003565B4 /* Channel.swift in Sources */,
 				B5BB378025210FC0006B3AF8 /* ConversationsListViewController.swift in Sources */,
 				B5566921252B8DF700412D5A /* Theme.swift in Sources */,
+				B5B208852566ED13007751FA /* RequestsFactory.swift in Sources */,
+				B5B208662566ECBC007751FA /* ServicesAssembly.swift in Sources */,
+				B5B2087C2566ED13007751FA /* CoreAssembly.swift in Sources */,
 				B5DD8B7D255DD412001E7FDC /* MessageDataSource.swift in Sources */,
 				B5521EA9252D101E00B02BAA /* ConversationEmptyVC.swift in Sources */,
+				B5B20890256701F2007751FA /* ProfileImageModel.swift in Sources */,
 				B5C482832548AE5D00A35791 /* CoreDataStack.swift in Sources */,
 				B5CEFD8E251A98D0001EAB70 /* ProfileVC.swift in Sources */,
 				B5DD8B79255DCD21001E7FDC /* MessagesService.swift in Sources */,
@@ -620,6 +764,8 @@
 				B5EC963C2524F6FB0017B2FF /* MessageCellModel.swift in Sources */,
 				B5E956E225211B7600D61585 /* DateFormatter+.swift in Sources */,
 				B5DD8B7F255DD453001E7FDC /* ChannelDataSource.swift in Sources */,
+				B5B2088B2566F6E9007751FA /* ProfileImageCell.swift in Sources */,
+				B5B208842566ED13007751FA /* RequestSender.swift in Sources */,
 				B5C0FE4A250E68EE005961DB /* AppDelegate.swift in Sources */,
 				B5ACC9BC2537761000288666 /* UIViewController+Keyboard.swift in Sources */,
 				B5DD8B8A255DE0D3001E7FDC /* ChannelStorage.swift in Sources */,
@@ -632,9 +778,11 @@
 				B54F501A254B3B1D00869A2B /* InfoObject.swift in Sources */,
 				B5F9634125211CFD00D79900 /* ConfigurableView.swift in Sources */,
 				B58114C6251BDD6600799120 /* User.swift in Sources */,
+				B5B208892566F4EE007751FA /* ProfileImagesVC.swift in Sources */,
 				B56E3A09253F7527003565B4 /* Message.swift in Sources */,
 				B5EC96332524F6880017B2FF /* ConversationViewController.swift in Sources */,
 				B58114C3251BDD0000799120 /* RoundedImageView.swift in Sources */,
+				B5B208682566ECBC007751FA /* ImagesService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
