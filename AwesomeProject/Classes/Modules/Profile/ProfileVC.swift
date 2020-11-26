@@ -20,13 +20,15 @@ class ProfileVC: ParentVC {
 
     private var isEditingMode = false {
         didSet {
+            toggleButtonAnimation()
+
             contentViews.forEach { $0.isHidden = isEditingMode }
             editingViews.forEach { $0.isHidden = !isEditingMode }
 
             if isEditingMode {
-                editButton.title = "Cancel"
+                editButton.setTitle("Cancel", for: .normal)
             } else {
-                editButton.title = "Edit profile"
+                editButton.setTitle("Edit profile", for: .normal)
             }
         }
     }
@@ -45,7 +47,7 @@ class ProfileVC: ParentVC {
     @IBOutlet private var descriptionLabel: UILabel!
     @IBOutlet private var saveGCDButton: DefaultButton!
     @IBOutlet private var saveOperationButton: DefaultButton!
-    @IBOutlet private var editButton: UIBarButtonItem!
+    @IBOutlet private var editButton: UIButton!
     @IBOutlet private var loader: UIActivityIndicatorView!
 
     @IBOutlet private var nameTextField: UITextField!
@@ -74,6 +76,9 @@ class ProfileVC: ParentVC {
         keyboardManager.bindToKeyboardNotifications(scrollView: scrollView)
         addTapToHideKeyboardGesture()
 
+        editButton.layer.borderWidth = 2
+        editButton.layer.borderColor = UIColor.blue.cgColor
+        editButton.layer.cornerRadius = 5
     }
 
     @IBAction func edit() {
@@ -180,6 +185,34 @@ class ProfileVC: ParentVC {
 
         if let destination = segue.destination as? ProfileImagesVC {
             destination.delegate = self
+        }
+    }
+
+    private func toggleButtonAnimation() {
+        if isEditingMode {
+            UIView.animateKeyframes(
+                withDuration: 0.3,
+                delay: 0,
+                options: [.repeat, .allowUserInteraction],
+                animations: {
+                    UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25) {
+                        self.editButton.transform = CGAffineTransform(translationX: 5, y: 5).rotated(by: 18 / 180 * .pi)
+                    }
+                    UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.5) {
+                        self.editButton.transform = CGAffineTransform(translationX: -5, y: -5).rotated(by: -18 / 180 * .pi)
+                    }
+                    UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25) {
+                        self.editButton.transform = .identity
+                    }
+                },
+                completion: { _ in }
+            )
+        } else {
+            UIView.animateKeyframes(withDuration: 0.3, delay: 0, options: [.allowUserInteraction], animations: {
+                self.editButton.transform = .identity
+            }, completion: { _ in
+                self.editButton.layer.removeAllAnimations()
+            })
         }
     }
 
