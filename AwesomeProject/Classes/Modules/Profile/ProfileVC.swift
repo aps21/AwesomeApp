@@ -10,6 +10,8 @@ class ProfileVC: ParentVC {
     let operationManager: UserManager = OperationDataManager()
     lazy var keyboardManager: KeyboardManagerProtocol = KeyboardManager(notificationCenter: notificationCenter)
 
+    private let editButtonAnimationKey = "Animation.Profile.EditButton"
+
     private var currentAvatar: UIImage?
     private var user: User? {
         didSet {
@@ -38,6 +40,31 @@ class ProfileVC: ParentVC {
         pickerController.allowsEditing = true
         pickerController.delegate = self
         return pickerController
+    }()
+
+    private lazy var editButtonAnimation: CAAnimationGroup = {
+        let angle: CGFloat = 18 * .pi / 180
+
+        let rotate = CAKeyframeAnimation(keyPath: "transform.rotation.z")
+        rotate.values = [0, -angle, angle, 0]
+        rotate.keyTimes = [0, 0.3, 0.75, 1]
+        rotate.isAdditive = true
+
+        let moveY = CAKeyframeAnimation(keyPath: "transform.translation.y")
+        moveY.values = [0, -5, -5, 5, 0]
+        moveY.keyTimes = [0.25, 0.3, 0.5, 0.75, 1]
+        moveY.isAdditive = true
+
+        let moveX = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        moveX.values = moveY.values
+        moveX.keyTimes = moveY.keyTimes
+        moveX.isAdditive = true
+
+        let group = CAAnimationGroup()
+        group.duration = 0.3
+        group.repeatCount = .infinity
+        group.animations = [rotate, moveY, moveX]
+        return group
     }()
 
     @IBOutlet private var contentStack: UIStackView!
@@ -190,29 +217,19 @@ class ProfileVC: ParentVC {
 
     private func toggleButtonAnimation() {
         if isEditingMode {
-            UIView.animateKeyframes(
-                withDuration: 0.3,
-                delay: 0,
-                options: [.repeat, .allowUserInteraction],
-                animations: {
-                    UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25) {
-                        self.editButton.transform = CGAffineTransform(translationX: 5, y: 5).rotated(by: 18 / 180 * .pi)
-                    }
-                    UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.5) {
-                        self.editButton.transform = CGAffineTransform(translationX: -5, y: -5).rotated(by: -18 / 180 * .pi)
-                    }
-                    UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25) {
-                        self.editButton.transform = .identity
-                    }
-                },
-                completion: { _ in }
-            )
+            editButton.layer.add(editButtonAnimation, forKey: editButtonAnimationKey)
         } else {
-            UIView.animateKeyframes(withDuration: 0.3, delay: 0, options: [.allowUserInteraction], animations: {
-                self.editButton.transform = .identity
-            }, completion: { _ in
+            guard let currentAnimation = editButton.layer.animation(forKey: editButtonAnimationKey)?.copy() as? CAAnimationGroup else {
+                return
+            }
+
+            CATransaction.setCompletionBlock({
                 self.editButton.layer.removeAllAnimations()
             })
+
+            CATransaction.begin()
+            currentAnimation.fillMode = .backwards
+            CATransaction.commit()
         }
     }
 
