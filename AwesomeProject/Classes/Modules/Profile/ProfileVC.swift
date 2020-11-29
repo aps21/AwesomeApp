@@ -10,6 +10,8 @@ class ProfileVC: ParentVC {
     let operationManager: UserManager = OperationDataManager()
     lazy var keyboardManager: KeyboardManagerProtocol = KeyboardManager(notificationCenter: notificationCenter)
 
+    private let editButtonAnimationKey = "Animation.Profile.EditButton"
+
     private var currentAvatar: UIImage?
     private var user: User? {
         didSet {
@@ -20,13 +22,15 @@ class ProfileVC: ParentVC {
 
     private var isEditingMode = false {
         didSet {
+            toggleButtonAnimation()
+
             contentViews.forEach { $0.isHidden = isEditingMode }
             editingViews.forEach { $0.isHidden = !isEditingMode }
 
             if isEditingMode {
-                editButton.title = "Cancel"
+                editButton.setTitle("Cancel", for: .normal)
             } else {
-                editButton.title = "Edit profile"
+                editButton.setTitle("Edit profile", for: .normal)
             }
         }
     }
@@ -38,6 +42,31 @@ class ProfileVC: ParentVC {
         return pickerController
     }()
 
+    private lazy var editButtonAnimation: CAAnimationGroup = {
+        let angle: CGFloat = 18 * .pi / 180
+
+        let rotate = CAKeyframeAnimation(keyPath: "transform.rotation.z")
+        rotate.values = [0, -angle, angle, 0]
+        rotate.keyTimes = [0, 0.3, 0.75, 1]
+        rotate.isAdditive = true
+
+        let moveY = CAKeyframeAnimation(keyPath: "transform.translation.y")
+        moveY.values = [0, -5, -5, 5, 0]
+        moveY.keyTimes = [0.25, 0.3, 0.5, 0.75, 1]
+        moveY.isAdditive = true
+
+        let moveX = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        moveX.values = moveY.values
+        moveX.keyTimes = moveY.keyTimes
+        moveX.isAdditive = true
+
+        let group = CAAnimationGroup()
+        group.duration = 0.3
+        group.repeatCount = .infinity
+        group.animations = [rotate, moveY, moveX]
+        return group
+    }()
+
     @IBOutlet private var contentStack: UIStackView!
     @IBOutlet private var scrollView: UIScrollView!
     @IBOutlet private var imageView: UIImageView!
@@ -45,7 +74,7 @@ class ProfileVC: ParentVC {
     @IBOutlet private var descriptionLabel: UILabel!
     @IBOutlet private var saveGCDButton: DefaultButton!
     @IBOutlet private var saveOperationButton: DefaultButton!
-    @IBOutlet private var editButton: UIBarButtonItem!
+    @IBOutlet private var editButton: UIButton!
     @IBOutlet private var loader: UIActivityIndicatorView!
 
     @IBOutlet private var nameTextField: UITextField!
@@ -74,6 +103,9 @@ class ProfileVC: ParentVC {
         keyboardManager.bindToKeyboardNotifications(scrollView: scrollView)
         addTapToHideKeyboardGesture()
 
+        editButton.layer.borderWidth = 2
+        editButton.layer.borderColor = UIColor.blue.cgColor
+        editButton.layer.cornerRadius = 5
     }
 
     @IBAction func edit() {
@@ -180,6 +212,24 @@ class ProfileVC: ParentVC {
 
         if let destination = segue.destination as? ProfileImagesVC {
             destination.delegate = self
+        }
+    }
+
+    private func toggleButtonAnimation() {
+        if isEditingMode {
+            editButton.layer.add(editButtonAnimation, forKey: editButtonAnimationKey)
+        } else {
+            guard let currentAnimation = editButton.layer.animation(forKey: editButtonAnimationKey)?.copy() as? CAAnimationGroup else {
+                return
+            }
+
+            CATransaction.setCompletionBlock({
+                self.editButton.layer.removeAllAnimations()
+            })
+
+            CATransaction.begin()
+            currentAnimation.fillMode = .backwards
+            CATransaction.commit()
         }
     }
 

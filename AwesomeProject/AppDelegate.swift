@@ -7,7 +7,7 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
+    var window: CustomWindow?
 
     func application(
         _: UIApplication,
@@ -19,6 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
         }
+        let window = CustomWindow(frame: UIScreen.main.bounds)
+        window.addGestures()
+        let storyboard = UIStoryboard(name: "ConversationsList", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "navController")
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        self.window = window
 
         FirebaseApp.configure()
 

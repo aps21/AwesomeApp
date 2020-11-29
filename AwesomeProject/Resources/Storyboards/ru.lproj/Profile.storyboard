@@ -17,11 +17,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cXQ-g6-yD9">
+                                <rect key="frame" x="140.5" y="106" width="94" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="wDh-oM-AvI"/>
+                                </constraints>
+                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                <state key="normal" title="Edit profile"/>
+                                <connections>
+                                    <action selector="edit" destination="cbO-Bc-K1C" eventType="touchUpInside" id="bwS-NG-FHl"/>
+                                </connections>
+                            </button>
                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EPe-UT-9ZB">
-                                <rect key="frame" x="0.0" y="96" width="375" height="571"/>
+                                <rect key="frame" x="0.0" y="156" width="375" height="511"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Z5-CC-W7R">
-                                        <rect key="frame" x="0.0" y="10" width="375" height="511"/>
+                                        <rect key="frame" x="0.0" y="10" width="375" height="451"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="zzR-hd-QhC">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="387"/>
@@ -120,7 +131,7 @@
                                         </constraints>
                                     </scrollView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="C3s-Vb-ahz">
-                                        <rect key="frame" x="19" y="521" width="337.5" height="40"/>
+                                        <rect key="frame" x="19" y="461" width="337.5" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xnh-Yw-10I" customClass="DefaultButton" customModule="AwesomeProject" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="166" height="40"/>
@@ -174,19 +185,16 @@
                         <constraints>
                             <constraint firstItem="EPe-UT-9ZB" firstAttribute="leading" secondItem="mIq-PV-oaL" secondAttribute="leading" id="8he-Fk-6zJ"/>
                             <constraint firstItem="mIq-PV-oaL" firstAttribute="bottom" secondItem="EPe-UT-9ZB" secondAttribute="bottom" id="Qtx-Tt-PEa"/>
-                            <constraint firstItem="EPe-UT-9ZB" firstAttribute="top" secondItem="mIq-PV-oaL" secondAttribute="top" id="RBJ-i5-MK5"/>
+                            <constraint firstItem="EPe-UT-9ZB" firstAttribute="top" secondItem="cXQ-g6-yD9" secondAttribute="bottom" constant="10" id="RBJ-i5-MK5"/>
+                            <constraint firstItem="cXQ-g6-yD9" firstAttribute="centerX" secondItem="mIq-PV-oaL" secondAttribute="centerX" id="TvZ-Xq-gZV"/>
                             <constraint firstItem="mE0-qF-jWN" firstAttribute="centerY" secondItem="mIq-PV-oaL" secondAttribute="centerY" id="dTa-lt-Y8m"/>
                             <constraint firstItem="mE0-qF-jWN" firstAttribute="centerX" secondItem="mIq-PV-oaL" secondAttribute="centerX" id="fch-Hg-jAv"/>
+                            <constraint firstItem="cXQ-g6-yD9" firstAttribute="top" secondItem="mIq-PV-oaL" secondAttribute="top" constant="10" id="kuh-Vy-HSB"/>
                             <constraint firstItem="EPe-UT-9ZB" firstAttribute="trailing" secondItem="mIq-PV-oaL" secondAttribute="trailing" id="o9A-MM-db2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="mIq-PV-oaL"/>
                     </view>
                     <navigationItem key="navigationItem" title="My Profile" largeTitleDisplayMode="always" id="Sn4-YU-wf2">
-                        <barButtonItem key="leftBarButtonItem" title="Edit profile" id="0xw-Jt-qhH">
-                            <connections>
-                                <action selector="edit" destination="cbO-Bc-K1C" id="ZV4-2g-ii6"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Close" style="done" id="63n-4k-25c">
                             <connections>
                                 <action selector="close" destination="cbO-Bc-K1C" id="IGm-AG-fju"/>
@@ -197,7 +205,7 @@
                         <outlet property="contentStack" destination="EPe-UT-9ZB" id="DVY-dg-Xbm"/>
                         <outlet property="descriptionLabel" destination="040-1k-hpC" id="L5N-Vw-euh"/>
                         <outlet property="descriptionTextView" destination="myG-IX-Uih" id="hft-9D-QSQ"/>
-                        <outlet property="editButton" destination="0xw-Jt-qhH" id="GQf-qF-eeP"/>
+                        <outlet property="editButton" destination="cXQ-g6-yD9" id="VVu-a3-ZFT"/>
                         <outlet property="imageView" destination="pze-mz-cgH" id="6bN-8y-eZm"/>
                         <outlet property="loader" destination="mE0-qF-jWN" id="EgE-wv-sFx"/>
                         <outlet property="nameLabel" destination="odw-6M-D2B" id="Dmx-mv-Fhx"/>
