@@ -4,10 +4,10 @@
 
 import UIKit
 
-final class EmittedLayer: CAEmitterLayer {
+public final class EmittedLayer: CAEmitterLayer {
     private let image: UIImage
 
-    init(image: UIImage) {
+    public init(image: UIImage) {
         self.image = image
         super.init()
     }

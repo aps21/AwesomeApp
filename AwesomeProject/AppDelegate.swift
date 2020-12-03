@@ -9,6 +9,10 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: CustomWindow?
 
+    var isUnitTests: Bool {
+        ProcessInfo.processInfo.environment["UNIT_TESTS"] == "true"
+    }
+
     func application(
         _: UIApplication,
         didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?

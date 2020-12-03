@@ -26,8 +26,47 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO"
+      codeCoverageEnabled = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "B5C0FE45250E68EE005961DB"
+            BuildableName = "AwesomeProject.app"
+            BlueprintName = "AwesomeProject"
+            ReferencedContainer = "container:AwesomeProject.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "UNIT_TESTS"
+            value = "true"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B5BE95502579889700B63CC4"
+               BuildableName = "AwesomeProjectTests.xctest"
+               BlueprintName = "AwesomeProjectTests"
+               ReferencedContainer = "container:AwesomeProject.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B57C4FFD257999D700072DC8"
+               BuildableName = "AwesomeProjectUITests.xctest"
+               BlueprintName = "AwesomeProjectUITests"
+               ReferencedContainer = "container:AwesomeProject.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

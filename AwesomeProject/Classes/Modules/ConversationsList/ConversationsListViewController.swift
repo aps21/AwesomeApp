@@ -29,6 +29,7 @@ class ConversationsListViewController: ParentVC {
 
     private lazy var avatarButton: UIButton = {
         let button = SimpleImageButton(frame: CGRect(x: 0, y: 0, width: Constants.avatarHeight, height: Constants.avatarHeight))
+        button.accessibilityIdentifier = "profile"
         button.layer.cornerRadius = Constants.avatarHeight / 2
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(openProfile), for: .touchUpInside)
