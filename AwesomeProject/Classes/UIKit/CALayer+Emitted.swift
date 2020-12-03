@@ -4,7 +4,7 @@
 
 import UIKit
 
-extension CALayer {
+public extension CALayer {
     func showEmitted(in point: CGPoint) {
         guard let image = UIImage(named: "Images/logo") else {
             return

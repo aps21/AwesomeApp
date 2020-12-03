@@ -86,6 +86,7 @@ class ProfileVC: ParentVC {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        editButton.accessibilityIdentifier = "editButton"
         loader.startAnimating()
         let manager: UserManager = Bool.random() ? gcdManager : operationManager
         manager.savedUser { [weak self] savedUser in
